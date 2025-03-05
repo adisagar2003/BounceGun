@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerSpeed = 10.0f;
     [SerializeField] private float jumpForce = 100.0f;
     [SerializeField] private float maxSpeed = 7.0f;
+    [SerializeField] private float airSpeed = 1.5f;
     private InputMaster inputMaster;
     private string debugString = "";
 
@@ -20,21 +21,46 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Check")]
     [SerializeField] private float playerHeight;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private bool grounded;
+    [SerializeField] private bool isGrounded;
     [SerializeField] private float groundDrag;
-    
+    [SerializeField] private bool isReadyToJump = true;
+    [SerializeField] private bool jumpInputPressed = false;
+    [SerializeField] private float jumpCooldown = 0.5f;
     // Start is called before the first frame update
     void Awake()
     {
         inputMaster = new InputMaster();
         inputMaster.Player.Move.performed += context => GetInput(context);
         inputMaster.Player.Move.canceled += context => GetInput(context);
-        inputMaster.Player.Jump.performed += context => PlayerJump(context);
+        inputMaster.Player.Jump.performed += context => JumpPressed();
+        inputMaster.Player.Jump.canceled += context => JumpCancelled();
     }
 
-    private void PlayerJump(InputAction.CallbackContext context)
+    private void JumpCancelled()
     {
-        _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        jumpInputPressed = false;
+    }
+
+    private void JumpPressed()
+    {
+        jumpInputPressed = true;
+        PlayerJump();
+    }
+
+    private void PlayerJump()
+    {
+        // when to jump
+        if (isGrounded && isReadyToJump && jumpInputPressed)
+        {
+            isReadyToJump = false;
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+    }
+
+    private void ResetJump()
+    {
+        isReadyToJump = true;
     }
 
     private void Start()
@@ -55,19 +81,25 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        PlayerJump();
         MovePlayer();
     }
 
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 1.0f, groundLayer);
+        SetIsGrounded();
         SpeedControl();
         HandleDrag();
     }
 
+    private void SetIsGrounded()
+    {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, groundLayer);
+    }
+
     private void HandleDrag()
     {
-        if (grounded)
+        if (isGrounded)
         {
             _rb.drag = groundDrag;
         }
@@ -86,8 +118,8 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         Vector3 directionOfMovement = orientation.forward * keyboardInput.y + orientation.right * keyboardInput.x;
-        _rb.AddForce(directionOfMovement * playerSpeed, ForceMode.Force);
-        Debug.Log(_rb.velocity);
+        if (isGrounded) _rb.AddForce(directionOfMovement * playerSpeed, ForceMode.Force);
+        if (!isGrounded) _rb.AddForce(directionOfMovement * playerSpeed * airSpeed, ForceMode.Force);
     }
 
     private void SpeedControl()

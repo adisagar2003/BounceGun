@@ -565,4 +565,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 10.08
+  jumpForce: 100
+  maxSpeed: 7
+  airSpeed: 1.5
   orientation: {fileID: 5284701022883181471}
+  playerHeight: 1.16
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isGrounded: 0
+  groundDrag: 0
+  isReadyToJump: 1
+  jumpInputPressed: 0
+  jumpCooldown: 0.5

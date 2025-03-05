@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed = 7.0f;
     [SerializeField] private float airSpeed = 1.5f;
     private InputMaster inputMaster;
-    private string debugString = "";
 
     private Rigidbody _rb;
     [SerializeField] private Transform orientation;
@@ -26,6 +25,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isReadyToJump = true;
     [SerializeField] private bool jumpInputPressed = false;
     [SerializeField] private float jumpCooldown = 0.5f;
+
+    #region Events
+    public delegate void SendDebugData(Dictionary<string,string> data);
+    public static event SendDebugData OnSendDebugData;
+    #endregion
+    private string debugString = "";
     // Start is called before the first frame update
     void Awake()
     {
@@ -34,33 +39,6 @@ public class PlayerMovement : MonoBehaviour
         inputMaster.Player.Move.canceled += context => GetInput(context);
         inputMaster.Player.Jump.performed += context => JumpPressed();
         inputMaster.Player.Jump.canceled += context => JumpCancelled();
-    }
-
-    private void JumpCancelled()
-    {
-        jumpInputPressed = false;
-    }
-
-    private void JumpPressed()
-    {
-        jumpInputPressed = true;
-        PlayerJump();
-    }
-
-    private void PlayerJump()
-    {
-        // when to jump
-        if (isGrounded && isReadyToJump && jumpInputPressed)
-        {
-            isReadyToJump = false;
-            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
-    }
-
-    private void ResetJump()
-    {
-        isReadyToJump = true;
     }
 
     private void Start()
@@ -90,12 +68,9 @@ public class PlayerMovement : MonoBehaviour
         SetIsGrounded();
         SpeedControl();
         HandleDrag();
+        CalculateDebugData();
     }
 
-    private void SetIsGrounded()
-    {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, groundLayer);
-    }
 
     private void HandleDrag()
     {
@@ -137,6 +112,49 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    #region Player Jump
+    private void JumpCancelled()
+    {
+        jumpInputPressed = false;
+    }
+
+    private void JumpPressed()
+    {
+        jumpInputPressed = true;
+        PlayerJump();
+    }
+
+    private void PlayerJump()
+    {
+        // when to jump
+        if (isGrounded && isReadyToJump && jumpInputPressed)
+        {
+            isReadyToJump = false;
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+    }
+    private void SetIsGrounded()
+    {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, groundLayer);
+    }
+
+    private void ResetJump()
+    {
+        isReadyToJump = true;
+    }
+
+    #endregion
+
     #region Debug Data
+    private void CalculateDebugData()
+    {
+        debugString = $"Player Debug Data\n"
+            + $"Max Speed: {playerSpeed}" +
+            $"Ground: {isGrounded}" +
+            $"Speed:{ _rb.velocity.magnitude}"
+            ;
+        OnSendDebugData?.Invoke(new Dictionary<string, string> { { "Player", debugString } });
+    }
     #endregion
 }

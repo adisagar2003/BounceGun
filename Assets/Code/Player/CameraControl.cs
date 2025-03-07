@@ -16,7 +16,8 @@ public class CameraControlPlayer : MonoBehaviour
     
     // alter player's rotation y according to the camera
     [SerializeField] private Transform playerTransform;
-
+    // debug
+    public bool showCameraDebugUI = false;
     void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -40,6 +41,7 @@ public class CameraControlPlayer : MonoBehaviour
     #region Debug
     private void OnGUI()
     {
+        if (!showCameraDebugUI) return;
         #if UNITY_EDITOR
         GUI.Label(new Rect(10, 70, 200, 200), $"xRotation: " +
             $"{xRotation} \n yRotation: " +

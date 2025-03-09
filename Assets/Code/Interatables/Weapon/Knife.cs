@@ -7,6 +7,8 @@ public class Knife : MonoBehaviour, IInteractable, IThrowable
     [SerializeField] private GameObject KnifePrefab;
     [SerializeField] private float throwingForce = 10.0f;
     [SerializeField] private float throwingUpwardForce = 10.0f;
+    [SerializeField] private float destroyTime = 3.0f;
+    [SerializeField] private Transform attackorigin;
     private Vector3 middleOfScreen;
 
 
@@ -14,6 +16,7 @@ public class Knife : MonoBehaviour, IInteractable, IThrowable
     {
         Debug.Log("Knife Awakened");
     }
+
     private void OnEnable()
     {
         CameraUtils.OnSendRayData += GetMiddleOfScreen;
@@ -41,13 +44,19 @@ public class Knife : MonoBehaviour, IInteractable, IThrowable
         // throws the gameobject from player(Middle of screen) to player's orientation.forward;
        GameObject knifeProjectile = Instantiate(KnifePrefab,middleOfScreen,Quaternion.identity);
        Rigidbody knifeProjectileRigidbody = knifeProjectile.GetComponent<Rigidbody>();
-
-       Vector3 throwingDirection = middleOfScreen;
+        StartCoroutine(AutoDestroy(destroyTime,knifeProjectile));
+        Vector3 throwingDirection = middleOfScreen;
        Vector3 upwardsDirection = new Vector3(0,1,0);
 
-       knifeProjectileRigidbody.AddForce(throwingDirection * throwingForce, ForceMode.Impulse);
-       knifeProjectileRigidbody.AddForce(upwardsDirection * throwingForce, ForceMode.Impulse);
+       knifeProjectileRigidbody.AddForce(attackorigin.forward * throwingForce, ForceMode.Impulse);
+       knifeProjectileRigidbody.AddForce(attackorigin.up * throwingForce, ForceMode.Impulse);
 
+    }
+
+    public IEnumerator AutoDestroy(float destroyTime, GameObject throwable)
+    {
+        yield return new WaitForSeconds(destroyTime);
+        Destroy(throwable);
     }
 
     private void GetMiddleOfScreen(Vector3 directionFromCamera)

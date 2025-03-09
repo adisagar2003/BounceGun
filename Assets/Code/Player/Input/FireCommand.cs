@@ -12,7 +12,7 @@ public class FireCommand : ICommand
     }
     public void Canceled()
     {
-
+        // futuer implementation
     }
 
     public void Execute()

@@ -23,19 +23,19 @@ public class CameraControlPlayer : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        inputMaster = new InputMaster();
-        inputMaster.Player.Look.performed += context => SetMouseLook(context);
-        inputMaster.Player.Look.canceled += context => isTakingInput = false;
+        //inputMaster = new InputMaster();
+        //inputMaster.Player.Look.performed += context => SetMouseLook(context);
+        //inputMaster.Player.Look.canceled += context => isTakingInput = false;
     }
 
     private void OnEnable()
     {
-        inputMaster.Player.Enable();
+        //inputMaster.Player.Enable();
     }
 
     private void OnDisable()
     {
-        inputMaster.Player.Disable();
+        //inputMaster.Player.Disable();
     }
 
     #region Debug
@@ -55,21 +55,21 @@ public class CameraControlPlayer : MonoBehaviour
     #endregion
 
     #region Mouse Input
-    private void SetMouseLook(InputAction.CallbackContext context)
+    public void SetMouseLook(Vector2 value)
     {
-        if (context.performed)
-        {
-            isTakingInput = true;
-        }
+        if (mouseDelta != Vector2.zero) isTakingInput = true;
+        mouseDelta = value;
+    }
 
-        mouseDelta = context.ReadValue<Vector2>();
+    public void SetIsTakingInput(bool value)
+    {
+        isTakingInput = value;
     }
     #endregion
 
     #region Camera Control
     private void SetCameraRotation()
     {
-        
         if (!isTakingInput) return; // do not rotate if mouse is not moving
         float lookY = mouseDelta.y * Time.deltaTime * sensY * -1;
         float lookX = mouseDelta.x * Time.deltaTime * sensX;

@@ -59,13 +59,13 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        inputMaster = new InputMaster();
-        inputMaster.Player.Move.performed += context => { GetInput(context); isMovePressed = true; };
-        inputMaster.Player.Move.canceled += context => { GetInput(context); isMovePressed = false; };
-        inputMaster.Player.Jump.performed += context => JumpPressed();
-        inputMaster.Player.Jump.canceled += context => JumpCancelled();
-        inputMaster.Player.Sprint.performed += context => { isSprintPressed = true; };
-        inputMaster.Player.Sprint.canceled += context => { isSprintPressed = false; };
+        //inputMaster = new InputMaster();
+        //inputMaster.Player.Move.performed += context => { GetInput(context); isMovePressed = true; };
+        //inputMaster.Player.Move.canceled += context => { GetInput(context); isMovePressed = false; };
+        //inputMaster.Player.Jump.performed += context => JumpPressed();
+        //inputMaster.Player.Jump.canceled += context => JumpCancelled();
+        //inputMaster.Player.Sprint.performed += context => { isSprintPressed = true; };
+        //inputMaster.Player.Sprint.canceled += context => { isSprintPressed = false; };
     }
 
     private void Start()
@@ -75,12 +75,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        inputMaster.Player.Enable();
     }
 
     private void OnDisable()
     {
-        inputMaster.Player.Disable();
     }
 
     // Update is called once per frame
@@ -116,6 +114,16 @@ public class PlayerMovement : MonoBehaviour
     private void GetInput(InputAction.CallbackContext ctx)
     {
         keyboardInput = ctx.ReadValue<Vector2>();
+    }
+
+    public void GetInput(Vector2 keyboardInput)
+    {
+        this.keyboardInput = keyboardInput;
+    }
+
+    public void SetIsMovePressed(bool isMovePressed)
+    {
+        this.isMovePressed = isMovePressed;
     }
 
     private void StateManagement()
@@ -219,12 +227,12 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Player Jump
-    private void JumpCancelled()
+    public void JumpCancelled()
     {
         jumpInputPressed = false;
     }
 
-    private void JumpPressed()
+    public void JumpPressed()
     {
         jumpInputPressed = true;
         PlayerJump();

@@ -27,6 +27,8 @@ public class PlayerInputHandler : MonoBehaviour
         _inputMaster.Player.Look.canceled += context => OnMouseLookCanceled();
         _inputMaster.Player.Fire.performed += context => OnFirePressed();
         _inputMaster.Player.Fire.canceled += context => OnFireCancelled();
+        _inputMaster.Player.Sprint.performed += context => OnSprintPerformed();
+        _inputMaster.Player.Sprint.canceled += context => OnSprintCanceled();
     }
 
 
@@ -38,6 +40,18 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnDisable()
     {
         _inputMaster.Disable();
+    }
+
+    private void OnSprintCanceled()
+    {
+        SprintCommand sprintCommand = new SprintCommand(_playerMovement);
+        sprintCommand.Canceled();
+    }
+
+    private void OnSprintPerformed()
+    {
+        SprintCommand sprintCommand = new SprintCommand(_playerMovement);
+        sprintCommand.Execute();
     }
 
     private void OnMovePerformed(InputAction.CallbackContext ctx)

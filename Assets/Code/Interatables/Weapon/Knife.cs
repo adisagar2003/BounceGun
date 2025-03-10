@@ -5,8 +5,10 @@ using UnityEngine;
 public class Knife : MonoBehaviour, IInteractable, IThrowable
 {
     [SerializeField] private GameObject KnifePrefab;
+    [Header("Projectile Forces")]
     [SerializeField] private float throwingForce = 10.0f;
     [SerializeField] private float throwingUpwardForce = 10.0f;
+    [SerializeField] private Vector3 throwingTorque = Vector3.zero;
     [SerializeField] private float destroyTime = 3.0f;
     [SerializeField] private Transform attackorigin;
     private Vector3 middleOfScreen;
@@ -40,17 +42,18 @@ public class Knife : MonoBehaviour, IInteractable, IThrowable
     [ContextMenu("Throw")]
     public void Throw()
     {
-        Debug.Log("Object thrown");
         // throws the gameobject from player(Middle of screen) to player's orientation.forward;
-       GameObject knifeProjectile = Instantiate(KnifePrefab,middleOfScreen,Quaternion.identity);
-       Rigidbody knifeProjectileRigidbody = knifeProjectile.GetComponent<Rigidbody>();
-        StartCoroutine(AutoDestroy(destroyTime,knifeProjectile));
-        Vector3 throwingDirection = middleOfScreen;
-       Vector3 upwardsDirection = new Vector3(0,1,0);
+        Rigidbody knifeProjectileRigidbody = SpawnThrowable(KnifePrefab);
+        knifeProjectileRigidbody.AddForce(attackorigin.forward * throwingForce, ForceMode.Impulse);
+        knifeProjectileRigidbody.AddTorque(throwingTorque);
+    }
 
-       knifeProjectileRigidbody.AddForce(attackorigin.forward * throwingForce, ForceMode.Impulse);
-       knifeProjectileRigidbody.AddForce(attackorigin.up * throwingForce, ForceMode.Impulse);
-
+    private Rigidbody SpawnThrowable(GameObject prefab)
+    {
+        GameObject throwableProjectile = Instantiate(prefab, attackorigin.position, Quaternion.Euler(-90,0,0));
+        Rigidbody throwableProjectileRigidbody = throwableProjectile.GetComponent<Rigidbody>();
+        StartCoroutine(AutoDestroy(destroyTime, throwableProjectile));
+        return throwableProjectileRigidbody;
     }
 
     public IEnumerator AutoDestroy(float destroyTime, GameObject throwable)

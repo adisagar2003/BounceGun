@@ -219,6 +219,11 @@ public class PlayerMovement : MonoBehaviour
         };
     }
 
+    public void SetIsSprintPressed(bool value)
+    {
+        isSprintPressed = value;
+    }
+
     private Vector3 ProjectMoveDirectionOnSlope(Vector3 moveDirection)
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;

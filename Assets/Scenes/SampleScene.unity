@@ -9007,8 +9007,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   KnifePrefab: {fileID: 2208471437315684052, guid: 28069a0517b3b5a4dac7d4567931a723,
     type: 3}
-  throwingForce: 1.87
-  throwingUpwardForce: 2.54
+  throwingForce: 5
+  throwingUpwardForce: 1
+  throwingTorque: {x: 90, y: 0, z: 0}
   destroyTime: 2.65
   attackorigin: {fileID: 1622914420}
 --- !u!1 &2018354044
@@ -9935,12 +9936,12 @@ PrefabInstance:
     - target: {fileID: 8890638854287083751, guid: 4512d26add0c45344b2290e6fdd09ca8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 8890638854287083751, guid: 4512d26add0c45344b2290e6fdd09ca8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 8890638854287083751, guid: 4512d26add0c45344b2290e6fdd09ca8,
         type: 3}
@@ -9955,7 +9956,7 @@ PrefabInstance:
     - target: {fileID: 8890638854287083751, guid: 4512d26add0c45344b2290e6fdd09ca8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 8890638854287083751, guid: 4512d26add0c45344b2290e6fdd09ca8,
         type: 3}

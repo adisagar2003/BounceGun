@@ -111,11 +111,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void GetInput(InputAction.CallbackContext ctx)
-    {
-        keyboardInput = ctx.ReadValue<Vector2>();
-    }
-
     public void GetInput(Vector2 keyboardInput)
     {
         this.keyboardInput = keyboardInput;

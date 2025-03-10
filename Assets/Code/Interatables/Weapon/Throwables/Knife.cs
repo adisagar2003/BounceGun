@@ -7,12 +7,11 @@ public class Knife : BaseThrowable, IInteractable
 
     private void Awake()
     {
-        Debug.Log("Knife Awakened");
     }
 
     public void Interact()
     {
-        Debug.Log("Future interactions");
+        // future interaction
     }
     
 }

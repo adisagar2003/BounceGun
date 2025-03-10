@@ -6,18 +6,19 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
 {
+
     private InputMaster _inputMaster;
     private PlayerMovement _playerMovement;
     private CameraControlPlayer _cameraControl;
+    private PlayerGrapple _playerGrapple;
     private IThrowable _throwable;
-
-
 
     private void Awake()
     {
         _inputMaster = new InputMaster();
         _playerMovement = transform.parent?.GetComponentInChildren<PlayerMovement>();
         _cameraControl = transform.parent?.GetComponentInChildren<CameraControlPlayer>();
+        _playerGrapple = transform.parent?.GetComponentInChildren<PlayerGrapple>();
         _throwable = transform.parent?.GetComponentInChildren<IThrowable>();
         _inputMaster.Player.Move.performed += context => OnMovePerformed(context);
         _inputMaster.Player.Move.canceled += context => OnMoveCanceled();
@@ -29,8 +30,19 @@ public class PlayerInputHandler : MonoBehaviour
         _inputMaster.Player.Fire.canceled += context => OnFireCancelled();
         _inputMaster.Player.Sprint.performed += context => OnSprintPerformed();
         _inputMaster.Player.Sprint.canceled += context => OnSprintCanceled();
+        _inputMaster.Player.Grapple.performed += context => OnGrapplePerformed();
+        _inputMaster.Player.Grapple.canceled += context => OnGrappleCanceled();
     }
 
+    private void OnGrapplePerformed()
+    {
+        _playerGrapple.SetIsGrappleKeyPressed(true);
+    }
+
+    private void OnGrappleCanceled()
+    {
+        _playerGrapple.SetIsGrappleKeyPressed(false);
+    }
 
     private void OnEnable()
     {

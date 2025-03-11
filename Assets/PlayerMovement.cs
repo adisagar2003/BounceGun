@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+   
     [Header("Movement")]
     [SerializeField] private float playerSpeed = 10.0f;
     [SerializeField] private float jumpForce = 100.0f;
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     [SerializeField] private Transform orientation;
+    [SerializeField] private Transform FPController;
     private Vector2 keyboardInput;
 
     [Header("Ground Check")]
@@ -51,9 +53,22 @@ public class PlayerMovement : MonoBehaviour
     [Header("Debugging")]
     public bool showDebugUI = false;
     [SerializeField] private string debugString = "";
+
+
+    public Vector3 GetPositionOfPlayer()
+    {
+        return FPController.position;
+    }
+
+    public void AddImpulsiveForceTowards(Vector3 direction)
+    {
+        _rb.AddForce(direction, ForceMode.Impulse);
+    }
     #region Events
     // future implementation
     public delegate void SendDebugData(Dictionary<string,string> data);
+
+
     public static event SendDebugData OnSendDebugData;
     #endregion
     // Start is called before the first frame update

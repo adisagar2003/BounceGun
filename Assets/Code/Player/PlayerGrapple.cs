@@ -10,15 +10,16 @@ public class PlayerGrapple : MonoBehaviour
     [SerializeField] private bool isGrappleKeyPressed = false;
     [SerializeField] private bool isGrappling = false;
     [SerializeField] private Transform gunTip;
+    [SerializeField] private Vector3 initialGrappleVelocity;
 
     [Header("Grapple Controls")]
     [SerializeField] private float grappleTimeElapsed = 0.0f;
-    [SerializeField] private float grappleTimeCooldown = 1.3f;
-    [SerializeField] private float grappleStartAfterThisManySeconds = 0.5f;
     [SerializeField] private float maxGrappleDistance = 5000.3f;
-    [SerializeField] private float grappleForce = 100.3f;
-    [SerializeField] private float grappleUpwardForce = 100.3f;
-
+    [SerializeField] private float grappleDuration = 1.2f;
+    [SerializeField] private float grappleHeightOffset = 3.2f;
+    [SerializeField] private float grappleLinearForce = 310.2f;
+    [SerializeField] private float stopGrappleAtThisDistance = 10.0f;
+    
     [Header("Grapple Points")]
     [SerializeField] private LayerMask whatIsGrappable;
     [SerializeField] private Vector3 grappleHitPoint;
@@ -43,36 +44,28 @@ public class PlayerGrapple : MonoBehaviour
             StartGrapple();
         } 
     }
-
     private void StartGrapple()
     {
-        isGrappling = true;
-        grappleTimeElapsed = 2.0f;
-
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position,cam.transform.forward, out hit, maxGrappleDistance,whatIsGrappable))
         {
+
             grappleHitPoint = hit.point;
             DrawLineToHitPoint();
-            Invoke(nameof(ExecuteGrapple), grappleStartAfterThisManySeconds);
+            ExecuteGrapple();
         }
     }
 
     private void DrawLineToHitPoint()
     {
+        lineRenderer.SetPosition(0, gunTip.transform.position);
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(1, grappleHitPoint);
     }
 
     private void ExecuteGrapple()
     {
-        if (isGrappling)
-        {
-            // multiplying with -1;
-            Vector3 directionTowardsGrapplePoint = (grappleHitPoint - cam.transform.position).normalized;
-            _playerMovement.AddImpulsiveForceTowards(directionTowardsGrapplePoint * grappleForce);
-            _playerMovement.AddImpulsiveForceTowards(Vector3.up * grappleUpwardForce);
-        }
+        isGrappling = true;
     }
 
     private void StopGrapple()
@@ -97,18 +90,23 @@ public class PlayerGrapple : MonoBehaviour
 
     private void Update()
     {
-        if (grappleTimeElapsed > 0.0f)
-        {
-            grappleTimeElapsed -= Time.deltaTime;
+        MoveTowardsHitPoint();
+    }
 
-            if (grappleTimeElapsed < 0.0f)
-            {
-                StopGrapple();
-            }
-           
+
+    private void MoveTowardsHitPoint()
+    {
+        if (isGrappling)
+        {
+            Debug.Log("grappling moving towards the target hit point");
+            Vector3 direction = grappleHitPoint - transform.position;
+            _playerMovement.AddLinearForceTowards(direction * grappleLinearForce);
         }
 
-        Debug.DrawRay(cam.transform.position, cam.transform.forward, Color.red);
+        if (Vector3.Distance(grappleHitPoint,transform.position) < stopGrappleAtThisDistance && isGrappling )
+        {
+            StopGrapple();
+        } 
     }
 
     private void OnGUI()

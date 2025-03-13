@@ -64,6 +64,11 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb.AddForce(direction, ForceMode.Impulse);
     }
+
+    public float GetGravityYValue()
+    {
+        return Physics.gravity.y;
+    }
     #region Events
     // future implementation
     public delegate void SendDebugData(Dictionary<string,string> data);
@@ -172,7 +177,12 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    # region PlayerMovement
+    public void AddLinearForceTowards(Vector3 value)
+    {
+        _rb.AddForce(value, ForceMode.Force);
+    }
+
+    #region PlayerMovement
     private void MovePlayer()
     {
         Vector3 directionOfMovement = orientation.forward * keyboardInput.y + orientation.right * keyboardInput.x;
@@ -237,6 +247,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 ProjectMoveDirectionOnSlope(Vector3 moveDirection)
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+    
+    public void SetGrappleVelocity(Vector3 value)
+    {
+        _rb.velocity = value;
     }
 
     #endregion

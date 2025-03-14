@@ -40,11 +40,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDetectionHeight = 0.3f;
     [SerializeField] private RaycastHit slopeHit;
 
+
     public enum PlayerMovementState
     {
         Idle,
         Walk,
         Sprint,
+        WallRun,
         Air
     };
     

@@ -1,3 +1,5 @@
+#define DebuggingMode
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,18 +10,24 @@ public class JumpCommand : ICommand
     
     public JumpCommand(PlayerMovement playerMovement)
     {
-        if (_playerMovement == null) return;
         this._playerMovement = playerMovement;
     }
     public void Canceled()
     {
-        if (_playerMovement == null) return;
         _playerMovement.JumpCancelled();
     }
 
     public void Execute()
     {
-        if (_playerMovement == null) return;
-        _playerMovement.JumpPressed();
+
+    #if DebuggingMode
+        if (_playerMovement == null)
+        {
+            Debug.LogError("Player Movement is null");
+            return;
+        };
+    #endif
+
+    _playerMovement.JumpPressed();
     }
 }

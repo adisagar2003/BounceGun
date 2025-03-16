@@ -8267,6 +8267,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FPController
       objectReference: {fileID: 0}
+    - target: {fileID: 2973496195414879259, guid: 05b3c47b521350e4f9faf0f943750b65,
+        type: 3}
+      propertyPath: raycastMaxDistance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3266798550878660262, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8280,7 +8285,7 @@ PrefabInstance:
     - target: {fileID: 6020498057333044900, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 75.36
+      value: 234.5
       objectReference: {fileID: 0}
     - target: {fileID: 6020498057333044900, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
@@ -8290,7 +8295,7 @@ PrefabInstance:
     - target: {fileID: 6020498057333044900, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 168.92
+      value: 168.9
       objectReference: {fileID: 0}
     - target: {fileID: 6020498057333044900, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
@@ -8340,12 +8345,17 @@ PrefabInstance:
     - target: {fileID: 8043016854699398353, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
       propertyPath: playerSpeed
-      value: 387
+      value: 818.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8043016854699398353, guid: 05b3c47b521350e4f9faf0f943750b65,
+        type: 3}
+      propertyPath: maxWalkSpeed
+      value: 7.4
       objectReference: {fileID: 0}
     - target: {fileID: 8043016854699398353, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}
       propertyPath: maxSprintSpeed
-      value: 13.7
+      value: 11.5
       objectReference: {fileID: 0}
     - target: {fileID: 8043016854699398353, guid: 05b3c47b521350e4f9faf0f943750b65,
         type: 3}

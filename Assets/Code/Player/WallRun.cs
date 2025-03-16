@@ -21,7 +21,7 @@ public class WallRun : MonoBehaviour
     private void Update()
     {
         WallCheck();
-
+        
         // Debug 
         Debug.DrawRay(transform.position, transform.right * raycastMaxDistance, Color.yellow);
         Debug.DrawRay(transform.position, transform.right * -1 * raycastMaxDistance, Color.red);
@@ -38,6 +38,7 @@ public class WallRun : MonoBehaviour
             isOnRightWall = true;
             isOnWall = true;
         }
+
         else if (!isOnLeftWall)
         {
             isOnRightWall = false;
@@ -49,7 +50,7 @@ public class WallRun : MonoBehaviour
         {
             Debug.Log("Left Wall Detection");
             isOnWall = true;
-            isOnLeftWall = true;
+            isOnLeftWall = true;    
         }
         else if (!isOnRightWall)
         {

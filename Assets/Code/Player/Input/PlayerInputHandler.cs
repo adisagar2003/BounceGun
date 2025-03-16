@@ -1,3 +1,5 @@
+#define DebugMode
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,11 +13,11 @@ using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour
 {
 
-    private InputMaster _inputMaster;
-    private PlayerMovement _playerMovement;
-    private CameraControlPlayer _cameraControl;
-    private PlayerGrapple _playerGrapple;
-    private IThrowable _throwable;
+    [SerializeField] private InputMaster _inputMaster;
+    [SerializeField] private PlayerMovement _playerMovement;
+    [SerializeField] private CameraControlPlayer _cameraControl;
+    [SerializeField] private PlayerGrapple _playerGrapple;
+    [SerializeField] private IThrowable _throwable;
 
     private void Awake()
     {
@@ -36,10 +38,17 @@ public class PlayerInputHandler : MonoBehaviour
         _inputMaster.Player.Sprint.canceled += context => OnSprintCanceled();
         _inputMaster.Player.Grapple.performed += context => OnGrapplePerformed();
         _inputMaster.Player.Grapple.canceled += context => OnGrappleCanceled();
+
+    #if DebugMode
+        
+    #endif
     }
 
     private void Start()
     {
+        _playerMovement = transform.GetComponentInChildren<PlayerMovement>();
+        _cameraControl = transform.GetComponentInChildren<CameraControlPlayer>();
+        _playerGrapple = transform.GetComponentInChildren<PlayerGrapple>();
         _inputMaster = new InputMaster();
     }
 

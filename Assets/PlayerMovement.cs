@@ -1,3 +1,5 @@
+#define DEBUGMODE
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSprintSpeed = 12.0f;
     [SerializeField] private float playerMaxSpeed = 7.0f;
     [SerializeField] private float airSpeed = 1.5f;
+    [SerializeField] private float playerStopIntensity = 2.0f;
     private InputMaster inputMaster;
 
     private Rigidbody _rb;
@@ -47,6 +50,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDetectionHeight = 0.3f;
     [SerializeField] private RaycastHit slopeHit;
 
+    [Header("WallRun")]
+    [SerializeField] private bool hasEnteredWallRunState = false;
+    [SerializeField] private float wallJumpForceHorizontal = 10.0f;
+    [SerializeField] private float wallJumpForceVertical = 20.0f;
+    [SerializeField] private float wallGravity = 4.0f;
+    [SerializeField] private float wallRunSpeedBoost = 10.0f;
+
+
+    // dependencies 
+    private WallRun _wallRun;
+
     public enum PlayerMovementState
     {
         Idle,
@@ -56,12 +70,12 @@ public class PlayerMovement : MonoBehaviour
         Air
     };
     
-    public PlayerMovementState currentState { get; private set; } = PlayerMovementState.Idle;
+    public PlayerMovementState currentState = PlayerMovementState.Idle;
+
 
     [Header("Debugging")]
     public bool showDebugUI = false;
     [SerializeField] private string debugString = "";
-
 
     public Vector3 GetPositionOfPlayer()
     {
@@ -92,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _wallRun = GetComponent<WallRun>();
     }
 
     private void OnEnable()
@@ -161,8 +176,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // air
-        if (!isGrounded)
+        if (!isGrounded && !hasEnteredWallRunState)
         {
+            _rb.useGravity = true;
             sprintBoost = 1.0f;
             playerMaxSpeed = maxWalkSpeed;
             currentState = PlayerMovementState.Air;
@@ -174,6 +190,13 @@ public class PlayerMovement : MonoBehaviour
             sprintBoost = 1.0f;
             playerMaxSpeed = maxWalkSpeed;
             currentState = PlayerMovementState.Idle;
+        }
+
+        //wallrun 
+        if (currentState == PlayerMovementState.WallRun)
+        {
+            // add constant downward force to simulate slide
+            _rb.AddForce(Vector3.down * wallGravity, ForceMode.Force);
         }
 
         // wall run 
@@ -190,14 +213,39 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         Vector3 directionOfMovement = orientation.forward * keyboardInput.y + orientation.right * keyboardInput.x;
-        
-        if (isGrounded && !isOnSlope) _rb.AddForce(directionOfMovement * playerSpeed * sprintBoost, ForceMode.Force);
-        else if (isOnSlope && isGrounded)
+
+        StopMovementIfNoInput(directionOfMovement);
+
+        // Handle WallRun Movement
+        if (currentState == PlayerMovementState.WallRun)
         {
-            _rb.AddForce(ProjectMoveDirectionOnSlope(directionOfMovement) * playerSpeed * sprintBoost, ForceMode.Force);
-            CheckIfPropellingUpInSlope();
+            _rb.AddForce(ProjectMoveDirectionOnSlope(directionOfMovement, _wallRun.GetWallHitPointNormal()) * playerSpeed * sprintBoost * wallRunSpeedBoost, ForceMode.Force);
         }
-        if (!isGrounded) _rb.AddForce(directionOfMovement * playerSpeed * airSpeed, ForceMode.Force);
+
+        else
+        {
+            // normal movement
+            if (isGrounded && !isOnSlope) _rb.AddForce(directionOfMovement * playerSpeed * sprintBoost, ForceMode.Force);
+
+            // slop movement
+            else if (isOnSlope && isGrounded)
+            {
+                _rb.AddForce(ProjectMoveDirectionOnSlope(directionOfMovement, slopeHit.normal) * playerSpeed * sprintBoost, ForceMode.Force);
+                CheckIfPropellingUpInSlope();
+            }
+
+            // air movement
+            if (!isGrounded) _rb.AddForce(directionOfMovement * playerSpeed * airSpeed, ForceMode.Force);
+        }
+    }
+
+    private void StopMovementIfNoInput(Vector3 directionOfMovement)
+    {
+        // stop the player without sliding if no movement
+        if (directionOfMovement == Vector3.zero && isGrounded && !isOnSlope && currentState != PlayerMovementState.WallRun)
+        {
+            _rb.velocity = Vector3.Lerp(_rb.velocity, Vector3.zero, Time.deltaTime * playerStopIntensity);
+        }
     }
 
     private void CheckIfPropellingUpInSlope()
@@ -205,6 +253,14 @@ public class PlayerMovement : MonoBehaviour
         if (_rb.velocity.y > 0)
         {
             _rb.AddForce(Vector3.down * 80.0f, ForceMode.Force);
+        }
+    }
+
+    private void CheckIfPropellingInWalls(Vector3 normalDirection)
+    {
+        if (_rb.velocity.y > 0)
+        {
+            _rb.AddForce(normalDirection * -1 * 80.0f * Time.deltaTime, ForceMode.Force);
         }
     }
 
@@ -237,7 +293,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            _rb.useGravity = true;
             isOnSlope = false;
             return false;
         };
@@ -248,11 +303,21 @@ public class PlayerMovement : MonoBehaviour
         isSprintPressed = value;
     }
 
-    private Vector3 ProjectMoveDirectionOnSlope(Vector3 moveDirection)
+    private Vector3 ProjectMoveDirectionOnSlope(Vector3 moveDirection, Vector3 normalHit)
+    {
+        return Vector3.ProjectOnPlane(moveDirection, normalHit).normalized;
+    }
+
+    private Vector3 ProjectMoveDirectionOnPlane(Vector3 moveDirection)
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
-    
+
+    public   void StopMovement()
+    {
+        _rb.velocity = Vector3.zero;
+    }
+
     public void SetGrappleVelocity(Vector3 value)
     {
         _rb.velocity = value;
@@ -275,12 +340,26 @@ public class PlayerMovement : MonoBehaviour
     private void PlayerJump()
     {
         // when to jump
-        if (isGrounded && isReadyToJump && jumpInputPressed)
+        if (isGrounded && isReadyToJump && jumpInputPressed && currentState != PlayerMovementState.WallRun)
         {
+
             isReadyToJump = false;
             _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
             // Call jump after delay if jump is pressed constantly
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        // Walljump: Direction will be normal towards plance...
+        else if (currentState == PlayerMovementState.WallRun && isReadyToJump && jumpInputPressed)
+        {
+        #if DEBUGMODE
+            Debug.Log("Player Jump for wall called");
+        #endif
+
+            isReadyToJump = false;
+            _rb.AddForce(_wallRun.GetWallHitPointNormal() * wallJumpForceHorizontal, ForceMode.Impulse);
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
@@ -298,15 +377,39 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    #region Wall Run
+    public void EnterWallRunState()
+    {
+        if (hasEnteredWallRunState) return;
+        hasEnteredWallRunState = true;
+        _rb.useGravity = false;
+        currentState = PlayerMovementState.WallRun;
+    }
+    public void ExitWallState()
+    {
+        // wall has been exited
+        if (!hasEnteredWallRunState) return;
+        hasEnteredWallRunState = false;
+        _rb.useGravity = true;
+        currentState = PlayerMovementState.Air;
+    }
+
+    #endregion
+
     #region Debug Data
     private void CalculateDebugData()
     {
         debugString = $"Player  Movement Debug Data\n"
             + $"\nMax Speed: {playerSpeed}" +
-            $"\nGround: {isGrounded}" +
+            $"\nIs On Ground: {isGrounded}" +
             $"\nSpeed:{ _rb.velocity.magnitude}" +
-            $"\nCurrent State: {currentState}" + 
-            $"\n Is On Slope: {isOnSlope}"
+            $"\nCurrent State: {currentState}" +
+            $"\n Is On Slope: {isOnSlope}" +
+            $"\n Jump" +
+            $"\n Is Ready To Jump: {isReadyToJump}" +
+            $"\n Jump Input Pressed: {jumpInputPressed}" +
+            $"\n Jump Cooldown: {jumpCooldown}" +
+            $"\n Has Entered Wall Run State: {hasEnteredWallRunState}"
             ;
     }
 

@@ -11,6 +11,7 @@ public class WallRun : MonoBehaviour
     public bool isOnLeftWall = false;
     [SerializeField] private float raycastMaxDistance = 50.0f;
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private RaycastHit wallHitPoint;
     // check for walls left and right
     // raycast transform.left, transform.right
 
@@ -34,9 +35,11 @@ public class WallRun : MonoBehaviour
         RaycastHit rightWall;
         if (Physics.Raycast(transform.position, transform.right, out rightWall, raycastMaxDistance, wallLayer))
         {
-            Debug.Log("Right Wall Detection");
             isOnRightWall = true;
             isOnWall = true;
+            _playerMovement.currentState = PlayerMovement.PlayerMovementState.WallRun;
+            wallHitPoint = rightWall;
+            _playerMovement.EnterWallRunState();
         }
 
         else if (!isOnLeftWall)
@@ -50,14 +53,24 @@ public class WallRun : MonoBehaviour
         {
             Debug.Log("Left Wall Detection");
             isOnWall = true;
-            isOnLeftWall = true;    
+            isOnLeftWall = true;
+            wallHitPoint = leftWall;
+            _playerMovement.EnterWallRunState();
         }
         else if (!isOnRightWall)
         {
-
             isOnLeftWall = false;
             isOnWall = false;
+            _playerMovement.ExitWallState();
         };
+
+    }
+
+
+    // For wall detection and calculating velocity depending on the orientation
+    public Vector3 GetWallHitPointNormal()
+    {
+        return wallHitPoint.normal;
     }
 
     private void DoWallRun()

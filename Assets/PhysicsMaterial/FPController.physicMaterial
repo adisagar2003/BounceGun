@@ -7,8 +7,8 @@ PhysicMaterial:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FPController
-  dynamicFriction: 4595
-  staticFriction: 763.1
+  dynamicFriction: 5212
+  staticFriction: 1057.6
   bounciness: 0
   frictionCombine: 0
   bounceCombine: 0

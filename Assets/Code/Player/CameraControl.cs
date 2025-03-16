@@ -1,41 +1,32 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+/// <summary>
+/// Takes care for looking around using Mouse Delta and Joystick(Future imple)..
+/// </summary>
 public class CameraControlPlayer : MonoBehaviour
 {
-    private InputMaster inputMaster;
     private Vector2 mouseDelta;
     private bool isTakingInput = false;
 
-    [SerializeField] private float sensX = 4.0f;
-    [SerializeField] private float sensY = 2.0f;
+    [SerializeField] [Range(0,100)] private float sensX = 4.0f;
+    [SerializeField] [Range(0, 100)] private float sensY = 2.0f;
     private float xRotation;
     private float yRotation;
     
     // alter player's rotation y according to the camera
     [SerializeField] private Transform playerTransform;
+
     // debug
     public bool showCameraDebugUI = false;
     void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        //inputMaster = new InputMaster();
-        //inputMaster.Player.Look.performed += context => SetMouseLook(context);
-        //inputMaster.Player.Look.canceled += context => isTakingInput = false;
-    }
-
-    private void OnEnable()
-    {
-        //inputMaster.Player.Enable();
-    }
-
-    private void OnDisable()
-    {
-        //inputMaster.Player.Disable();
     }
 
     #region Debug
@@ -59,13 +50,19 @@ public class CameraControlPlayer : MonoBehaviour
     {
         if (mouseDelta != Vector2.zero) isTakingInput = true;
         mouseDelta = value;
+
+    #if DebugGame
+        Debug.Log("MouseDelta" + mouseDelta);
+    #endif
     }
 
+    // Check for taking input: For input system.
     public void SetIsTakingInput(bool value)
     {
         isTakingInput = value;
     }
     #endregion
+
 
     #region Camera Control
     private void SetCameraRotation()

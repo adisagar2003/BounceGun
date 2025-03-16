@@ -15,11 +15,18 @@ public class MouseLookCommand : ICommand
 
     public void Canceled()
     {
+        if (_cameraControl == null) return;
         _cameraControl.SetIsTakingInput(false);
     }
 
     public void Execute()
     {
-        _cameraControl.SetMouseLook(_mouseDelta);
+        if (_cameraControl == null) return;
+        if (!_cameraControl)
+        {
+            
+            return;
+        }
+        _cameraControl.SetMouseLook(_mouseDelta);   
     }
 }

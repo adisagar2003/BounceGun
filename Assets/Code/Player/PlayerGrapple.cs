@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Grapple Functionality of player
+/// </summary>
 public class PlayerGrapple : MonoBehaviour
 {
     private PlayerMovement _playerMovement;
@@ -17,6 +21,7 @@ public class PlayerGrapple : MonoBehaviour
     [SerializeField] private float maxGrappleDistance = 5000.3f;
     [SerializeField] private float grappleDuration = 1.2f;
     [SerializeField] private float grappleHeightOffset = 3.2f;
+    [Header("Grapple Speed")]
     [SerializeField] private float grappleLinearForce = 310.2f;
     [SerializeField] private float stopGrappleAtThisDistance = 10.0f;
     
@@ -25,7 +30,7 @@ public class PlayerGrapple : MonoBehaviour
     [SerializeField] private Vector3 grappleHitPoint;
     [SerializeField] private Camera cam;
 
-    [Header("Line Hanlde")]
+    [Header("Line Handle")]
     [SerializeField] private GameObject lineRendererComponent;
     [SerializeField] private LineRenderer lineRenderer;
 
@@ -49,13 +54,13 @@ public class PlayerGrapple : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position,cam.transform.forward, out hit, maxGrappleDistance,whatIsGrappable))
         {
-
             grappleHitPoint = hit.point;
             DrawLineToHitPoint();
             ExecuteGrapple();
         }
     }
 
+    // draw lineRenderer to `hit point` from gun tip to hit point
     private void DrawLineToHitPoint()
     {
         lineRenderer.SetPosition(0, gunTip.transform.position);
@@ -75,6 +80,7 @@ public class PlayerGrapple : MonoBehaviour
         ResetLineRenderer();
         Debug.Log("GrappleStopped");
     }
+
     private void ResetLineRenderer()
     {
         lineRenderer.SetPosition(1, lineRenderer.GetPosition(0));

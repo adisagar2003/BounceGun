@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+/// <summary>
+/// Handles Player Input.
+/// </summary>
 public class PlayerInputHandler : MonoBehaviour
 {
 
@@ -16,10 +20,10 @@ public class PlayerInputHandler : MonoBehaviour
     private void Awake()
     {
         _inputMaster = new InputMaster();
-        _playerMovement = transform.parent?.GetComponentInChildren<PlayerMovement>();
-        _cameraControl = transform.parent?.GetComponentInChildren<CameraControlPlayer>();
-        _playerGrapple = transform.parent?.GetComponentInChildren<PlayerGrapple>();
-        _throwable = transform.parent?.GetComponentInChildren<IThrowable>();
+        _playerMovement = transform.GetComponentInChildren<PlayerMovement>();
+        _cameraControl = transform.GetComponentInChildren<CameraControlPlayer>();
+        _playerGrapple = transform.GetComponentInChildren<PlayerGrapple>();
+        _throwable = transform.GetComponentInChildren<IThrowable>();
         _inputMaster.Player.Move.performed += context => OnMovePerformed(context);
         _inputMaster.Player.Move.canceled += context => OnMoveCanceled();
         _inputMaster.Player.Jump.performed += context => OnJumpPressed();
@@ -34,13 +38,20 @@ public class PlayerInputHandler : MonoBehaviour
         _inputMaster.Player.Grapple.canceled += context => OnGrappleCanceled();
     }
 
+    private void Start()
+    {
+        _inputMaster = new InputMaster();
+    }
+
     private void OnGrapplePerformed()
     {
+        // future:-> Migrate to GrappleCommand.cs
         _playerGrapple.SetIsGrappleKeyPressed(true);
     }
 
     private void OnGrappleCanceled()
     {
+        // future:-> Migrate to GrappleCommand.cs
         _playerGrapple.SetIsGrappleKeyPressed(false);
     }
 

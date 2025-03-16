@@ -4,9 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+/// <summary>
+/// Controls movement to the player 
+/// MAJOR DEPENDENT CLASS FOR PLAYER
+/// </summary>
+/// 
+    
 public class PlayerMovement : MonoBehaviour
 {
-   
+    [Header("Handles Player Movement")]
     [Header("Movement")]
     [SerializeField] private float playerSpeed = 10.0f;
     [SerializeField] private float jumpForce = 100.0f;
@@ -40,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDetectionHeight = 0.3f;
     [SerializeField] private RaycastHit slopeHit;
 
-
     public enum PlayerMovementState
     {
         Idle,
@@ -67,27 +73,20 @@ public class PlayerMovement : MonoBehaviour
         _rb.AddForce(direction, ForceMode.Impulse);
     }
 
+
+    // gets real value of gravity in game. 
     public float GetGravityYValue()
     {
         return Physics.gravity.y;
     }
     #region Events
-    // future implementation
+    [Obsolete]
     public delegate void SendDebugData(Dictionary<string,string> data);
-
-
+    [Obsolete]
     public static event SendDebugData OnSendDebugData;
     #endregion
-    // Start is called before the first frame update
     void Awake()
     {
-        //inputMaster = new InputMaster();
-        //inputMaster.Player.Move.performed += context => { GetInput(context); isMovePressed = true; };
-        //inputMaster.Player.Move.canceled += context => { GetInput(context); isMovePressed = false; };
-        //inputMaster.Player.Jump.performed += context => JumpPressed();
-        //inputMaster.Player.Jump.canceled += context => JumpCancelled();
-        //inputMaster.Player.Sprint.performed += context => { isSprintPressed = true; };
-        //inputMaster.Player.Sprint.canceled += context => { isSprintPressed = false; };
     }
 
     private void Start()
@@ -176,6 +175,9 @@ public class PlayerMovement : MonoBehaviour
             playerMaxSpeed = maxWalkSpeed;
             currentState = PlayerMovementState.Idle;
         }
+
+        // wall run 
+        // future implementation
 
     }
 
@@ -277,9 +279,13 @@ public class PlayerMovement : MonoBehaviour
         {
             isReadyToJump = false;
             _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            // Call jump after delay if jump is pressed constantly
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
+
+    // ground check 
     private void SetIsGrounded()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, groundLayer);

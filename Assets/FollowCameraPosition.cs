@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/*
- Attaches to Camera Holder and sets the position of 
-it to Camera Position inside FPS Controller.
- */
-
+/// <summary>
+///  Attaches to Camera Holder (Orientation) and sets the position of 
+/// it to Camera Position inside FPS Controller.
+/// </summary>
 public class FollowCameraPosition : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransformInFPSController;

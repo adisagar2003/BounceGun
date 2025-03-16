@@ -18,7 +18,6 @@ public class CameraUtils : MonoBehaviour
         _mainCamera = GetComponentInChildren<Camera>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         OnSendRayData?.Invoke(SendCameraPosition());

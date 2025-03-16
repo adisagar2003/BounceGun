@@ -15,12 +15,22 @@ public class MoveCommand: ICommand
 
     public void Execute()
     {
+        if (_playerMovement == null)
+        {
+            Debug.LogError("Null Player");
+            return;
+        }
         _playerMovement.GetInput(_keyboardInput);
         _playerMovement.SetIsMovePressed(true);
     }
 
     public void Canceled()
     {
+        if (_playerMovement == null)
+        {
+            Debug.LogError("Null Player");
+            return;
+        }
         _playerMovement.GetInput(_keyboardInput);
         _playerMovement.SetIsMovePressed(false);
     }

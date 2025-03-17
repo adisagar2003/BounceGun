@@ -57,10 +57,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallGravity = 4.0f;
     [SerializeField] private float wallRunSpeedBoost = 10.0f;
 
+    #region Events
+    public delegate void CameraLeanTowards(string direction);
+    public static event CameraLeanTowards  OnCameraLeanTowards;
+
+    public delegate void ResetCamera();
+    public static event ResetCamera OnResetCamera;
+    #endregion
 
     // dependencies 
     private WallRun _wallRun;
-
+    private CameraControlPlayer _cameraControl;
     public enum PlayerMovementState
     {
         Idle,
@@ -76,6 +83,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Debugging")]
     public bool showDebugUI = false;
     [SerializeField] private string debugString = "";
+
+    private void Awake()
+    {
+    }
 
     public Vector3 GetPositionOfPlayer()
     {
@@ -99,14 +110,12 @@ public class PlayerMovement : MonoBehaviour
     [Obsolete]
     public static event SendDebugData OnSendDebugData;
     #endregion
-    void Awake()
-    {
-    }
-
+  
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _wallRun = GetComponent<WallRun>();
+        _cameraControl = GetComponentInChildren<CameraControlPlayer>();
     }
 
     private void OnEnable()
@@ -219,6 +228,8 @@ public class PlayerMovement : MonoBehaviour
         // Handle WallRun Movement
         if (currentState == PlayerMovementState.WallRun)
         {
+            // disable x movement
+            directionOfMovement = orientation.forward * keyboardInput.y;
             _rb.AddForce(ProjectMoveDirectionOnSlope(directionOfMovement, _wallRun.GetWallHitPointNormal()) * playerSpeed * sprintBoost * wallRunSpeedBoost, ForceMode.Force);
         }
 
@@ -378,13 +389,15 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Wall Run
-    public void EnterWallRunState()
+    public void EnterWallRunState(string directionToLeanTo)
     {
         if (hasEnteredWallRunState) return;
         hasEnteredWallRunState = true;
         _rb.useGravity = false;
         currentState = PlayerMovementState.WallRun;
+        OnCameraLeanTowards?.Invoke(directionToLeanTo);
     }
+
     public void ExitWallState()
     {
         // wall has been exited
@@ -392,6 +405,7 @@ public class PlayerMovement : MonoBehaviour
         hasEnteredWallRunState = false;
         _rb.useGravity = true;
         currentState = PlayerMovementState.Air;
+        OnResetCamera?.Invoke();
     }
 
     #endregion

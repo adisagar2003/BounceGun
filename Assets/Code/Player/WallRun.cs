@@ -39,7 +39,7 @@ public class WallRun : MonoBehaviour
             isOnWall = true;
             _playerMovement.currentState = PlayerMovement.PlayerMovementState.WallRun;
             wallHitPoint = rightWall;
-            _playerMovement.EnterWallRunState();
+            _playerMovement.EnterWallRunState("right");
         }
 
         else if (!isOnLeftWall)
@@ -55,7 +55,7 @@ public class WallRun : MonoBehaviour
             isOnWall = true;
             isOnLeftWall = true;
             wallHitPoint = leftWall;
-            _playerMovement.EnterWallRunState();
+            _playerMovement.EnterWallRunState("left");
         }
         else if (!isOnRightWall)
         {

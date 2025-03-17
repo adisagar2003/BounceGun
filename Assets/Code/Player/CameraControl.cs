@@ -15,14 +15,27 @@ public class CameraControlPlayer : MonoBehaviour
 
     [SerializeField] [Range(0,100)] private float sensX = 4.0f;
     [SerializeField] [Range(0, 100)] private float sensY = 2.0f;
+    [SerializeField] private float leanAngle = 17.0f;
     private float xRotation;
     private float yRotation;
     
+
     // alter player's rotation y according to the camera
     [SerializeField] private Transform playerTransform;
 
     // debug
     public bool showCameraDebugUI = false;
+
+    private void OnEnable()
+    {
+        PlayerMovement.OnCameraLeanTowards += LeanCameraTowards;   
+    }
+
+    private void OnDisable()
+    {
+        PlayerMovement.OnCameraLeanTowards -= LeanCameraTowards;   
+        
+    }
     void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -73,13 +86,33 @@ public class CameraControlPlayer : MonoBehaviour
         yRotation += lookX;
         xRotation += lookY;
         xRotation = Mathf.Clamp(xRotation, -90, 90);
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        playerTransform.rotation = Quaternion.Euler(0, yRotation, 0);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, transform.rotation.z);
+        playerTransform.rotation = Quaternion.Euler(0, yRotation, transform.rotation.z);
     }
     #endregion
     private void Update()
     {
         SetCameraRotation();
+    }
+
+
+    public void LeanCameraTowards(string direction)
+    {
+        if (direction == "left")
+        {
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, leanAngle * -1);
+        }
+
+        else if (direction == "right")
+        {
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, leanAngle);
+        }
+    }
+
+    [ContextMenu("Reset Rotation")]
+    public void ResetRotation()
+    {
+        transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0);
     }
 }
 

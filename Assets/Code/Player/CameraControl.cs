@@ -21,7 +21,7 @@ public class CameraControlPlayer : MonoBehaviour
     
 
     // alter player's rotation y according to the camera
-    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Transform playerOrientation;
 
     // debug
     public bool showCameraDebugUI = false;
@@ -87,7 +87,7 @@ public class CameraControlPlayer : MonoBehaviour
         xRotation += lookY;
         xRotation = Mathf.Clamp(xRotation, -90, 90);
         transform.rotation = Quaternion.Euler(xRotation, yRotation, transform.rotation.z);
-        playerTransform.rotation = Quaternion.Euler(0, yRotation, transform.rotation.z);
+        playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0);
     }
     #endregion
     private void Update()

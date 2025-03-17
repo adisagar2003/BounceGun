@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wall Run functionality
+/// </summary>
 public class WallRun : MonoBehaviour
 {
     private PlayerMovement _playerMovement;
@@ -12,6 +15,7 @@ public class WallRun : MonoBehaviour
     [SerializeField] private float raycastMaxDistance = 50.0f;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private RaycastHit wallHitPoint;
+
     // check for walls left and right
     // raycast transform.left, transform.right
 
@@ -22,10 +26,10 @@ public class WallRun : MonoBehaviour
     private void Update()
     {
         WallCheck();
-        
+
         // Debug 
-        Debug.DrawRay(transform.position, transform.right * raycastMaxDistance, Color.yellow);
-        Debug.DrawRay(transform.position, transform.right * -1 * raycastMaxDistance, Color.red);
+        Debug.DrawRay(transform.position, Vector3.forward * raycastMaxDistance, Color.yellow); ;
+        Debug.DrawRay(transform.position, Vector3.forward * -1 * raycastMaxDistance, Color.red);
     }
 
 
@@ -33,7 +37,7 @@ public class WallRun : MonoBehaviour
     private void WallCheck()
     {
         RaycastHit rightWall;
-        if (Physics.Raycast(transform.position, transform.right, out rightWall, raycastMaxDistance, wallLayer))
+        if (Physics.Raycast(transform.position, Vector3.forward, out rightWall, raycastMaxDistance, wallLayer))
         {
             isOnRightWall = true;
             isOnWall = true;
@@ -49,7 +53,7 @@ public class WallRun : MonoBehaviour
         };
 
         RaycastHit leftWall;
-        if (Physics.Raycast(transform.position, transform.right * -1, out leftWall, raycastMaxDistance, wallLayer))
+        if (Physics.Raycast(transform.position, transform.forward * -1, out leftWall, raycastMaxDistance, wallLayer))
         {
             Debug.Log("Left Wall Detection");
             isOnWall = true;

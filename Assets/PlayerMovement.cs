@@ -379,6 +379,7 @@ public class PlayerMovement : MonoBehaviour
     private void SetIsGrounded()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, groundLayer);
+        Debug.DrawRay(transform.position, Vector3.down, Color.red, playerHeight);
     }
 
     private void ResetJump()

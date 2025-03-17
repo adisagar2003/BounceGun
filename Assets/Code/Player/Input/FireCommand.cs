@@ -17,6 +17,6 @@ public class FireCommand : ICommand
 
     public void Execute()
     {
-        _throwable.Throw();       
+        _throwable?.Throw();       
     }
 }

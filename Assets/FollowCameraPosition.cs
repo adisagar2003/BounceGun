@@ -10,6 +10,11 @@ using UnityEngine;
 public class FollowCameraPosition : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransformInFPSController;
+
+    private void Start()
+    {
+        transform.position = cameraTransformInFPSController.position;
+    }
     private void Update()
     {
         transform.position = cameraTransformInFPSController.position;

@@ -5,9 +5,14 @@ using UnityEngine;
 
 /// <summary>
 /// Grapple Functionality of player
+/// Dependencies: 
+///     -- Player input handler
+///     -- Line renderer in child object
+///     -- pLAYER MOVEMENT
 /// </summary>
 public class PlayerGrapple : MonoBehaviour
 {
+
     private PlayerMovement _playerMovement;
 
     [Header("Grapple Checks")]
@@ -37,7 +42,7 @@ public class PlayerGrapple : MonoBehaviour
     private void Awake()
     {
        
-        lineRenderer = lineRendererComponent.GetComponent<LineRenderer>();
+        lineRenderer = lineRendererComponent.GetComponentInChildren<LineRenderer>();
         _playerMovement = GetComponent<PlayerMovement>();
         lineRenderer.enabled = false;
     }
@@ -115,6 +120,10 @@ public class PlayerGrapple : MonoBehaviour
         } 
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position + new Vector3(maxGrappleDistance, 0, 0), 5.0f);
+    }
     private void OnGUI()
     {
         

@@ -10,6 +10,11 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Controls movement to the player 
 /// MAJOR DEPENDENT CLASS FOR PLAYER
+/// Dependencies:
+/// 
+///     -- WallRun.cs
+///     -- CameraControlPlayer
+///     -- Rigidbody on GameObject
 /// </summary>
 /// 
     
@@ -35,6 +40,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerHeight;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private bool isGrounded;
+
+    // returns current position
+    public Vector3 GetCurrentPosition()
+    {
+        return transform.position;
+    }
+
     [SerializeField] private float groundDrag;
     [SerializeField] private bool isReadyToJump = true;
     [SerializeField] private bool jumpInputPressed = false;
@@ -50,13 +62,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDetectionHeight = 0.3f;
     [SerializeField] private RaycastHit slopeHit;
 
-    [Header("WallRun")]
-    [SerializeField] private bool hasEnteredWallRunState = false;
-    [SerializeField] private float wallJumpForceHorizontal = 10.0f;
-    [SerializeField] private float wallJumpForceVertical = 20.0f;
-    [SerializeField] private float wallGravity = 4.0f;
-    [SerializeField] private float wallRunSpeedBoost = 10.0f;
-
     #region Events
     public delegate void CameraLeanTowards(string direction);
     public static event CameraLeanTowards  OnCameraLeanTowards;
@@ -65,8 +70,8 @@ public class PlayerMovement : MonoBehaviour
     public static event ResetCamera OnResetCamera;
     #endregion
 
-    // dependencies 
-    private WallRun _wallRun;
+    // dependencies
+    private WallRun _playerWallRun;
     private CameraControlPlayer _cameraControl;
     public enum PlayerMovementState
     {
@@ -114,8 +119,8 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _wallRun = GetComponent<WallRun>();
         _cameraControl = GetComponentInChildren<CameraControlPlayer>();
+        _playerWallRun = GetComponent<WallRun>();
     }
 
     private void OnEnable()
@@ -185,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // air
-        if (!isGrounded && !hasEnteredWallRunState)
+        if (!isGrounded && !_playerWallRun.hasEnteredWallRunState)
         {
             _rb.useGravity = true;
             sprintBoost = 1.0f;
@@ -205,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
         if (currentState == PlayerMovementState.WallRun)
         {
             // add constant downward force to simulate slide
-            _rb.AddForce(Vector3.down * wallGravity, ForceMode.Force);
+            _rb.AddForce(Vector3.down * _playerWallRun.wallGravity, ForceMode.Force);
         }
 
         // wall run 
@@ -230,7 +235,7 @@ public class PlayerMovement : MonoBehaviour
         {
             // disable x movement
             directionOfMovement = orientation.forward * keyboardInput.y;
-            _rb.AddForce(ProjectMoveDirectionOnSlope(directionOfMovement, _wallRun.GetWallHitPointNormal()) * playerSpeed * sprintBoost * wallRunSpeedBoost, ForceMode.Force);
+            _rb.AddForce(ProjectMoveDirectionOnSlope(directionOfMovement, _playerWallRun.GetWallHitPointNormal()) * playerSpeed * sprintBoost * _playerWallRun.wallRunSpeedBoost, ForceMode.Force);
         }
 
         else
@@ -324,7 +329,7 @@ public class PlayerMovement : MonoBehaviour
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
-    public   void StopMovement()
+    public void StopMovement()
     {
         _rb.velocity = Vector3.zero;
     }
@@ -369,8 +374,8 @@ public class PlayerMovement : MonoBehaviour
         #endif
 
             isReadyToJump = false;
-            _rb.AddForce(_wallRun.GetWallHitPointNormal() * wallJumpForceHorizontal, ForceMode.Impulse);
-            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _rb.useGravity = true;
+            _rb.AddForce(_playerWallRun.GetWallHitPointNormal() * _playerWallRun.wallJumpForceHorizontal, ForceMode.Impulse);
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
@@ -379,6 +384,7 @@ public class PlayerMovement : MonoBehaviour
     private void SetIsGrounded()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, groundLayer);
+         
         Debug.DrawRay(transform.position, Vector3.down, Color.red, playerHeight);
     }
 
@@ -392,8 +398,8 @@ public class PlayerMovement : MonoBehaviour
     #region Wall Run
     public void EnterWallRunState(string directionToLeanTo)
     {
-        if (hasEnteredWallRunState) return;
-        hasEnteredWallRunState = true;
+        if (_playerWallRun.hasEnteredWallRunState) return;
+        _playerWallRun.hasEnteredWallRunState = true;
         _rb.useGravity = false;
         currentState = PlayerMovementState.WallRun;
         OnCameraLeanTowards?.Invoke(directionToLeanTo);
@@ -402,8 +408,8 @@ public class PlayerMovement : MonoBehaviour
     public void ExitWallState()
     {
         // wall has been exited
-        if (!hasEnteredWallRunState) return;
-        hasEnteredWallRunState = false;
+        if (!_playerWallRun.hasEnteredWallRunState) return;
+        _playerWallRun.hasEnteredWallRunState = false;
         _rb.useGravity = true;
         currentState = PlayerMovementState.Air;
         OnResetCamera?.Invoke();
@@ -424,7 +430,7 @@ public class PlayerMovement : MonoBehaviour
             $"\n Is Ready To Jump: {isReadyToJump}" +
             $"\n Jump Input Pressed: {jumpInputPressed}" +
             $"\n Jump Cooldown: {jumpCooldown}" +
-            $"\n Has Entered Wall Run State: {hasEnteredWallRunState}"
+            $"\n Has Entered Wall Run State: {_playerWallRun.hasEnteredWallRunState}"
             ;
     }
 

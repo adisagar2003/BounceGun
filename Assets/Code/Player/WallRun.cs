@@ -16,11 +16,24 @@ public class WallRun : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private RaycastHit wallHitPoint;
 
+    [Header("WallRun")]
+    [SerializeField] public bool hasEnteredWallRunState = false;
+    [SerializeField] public float wallJumpForceHorizontal = 14.0f;
+    [SerializeField] public float wallJumpForceVertical = 20.0f;
+    [SerializeField] public float wallGravity = 4.0f;
+    [SerializeField] public float wallRunSpeedBoost = 10.0f;
+
+    #region Events
+    public delegate void StopCameraLerp();
+    public static event StopCameraLerp OnStopCameraLerp;
+    #endregion
     // check for walls left and right
     // raycast transform.left, transform.right
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         _playerMovement = GetComponent<PlayerMovement>();
     }
     private void Update()
@@ -50,12 +63,12 @@ public class WallRun : MonoBehaviour
         {
             isOnRightWall = false;
             isOnWall = false;
+            _playerMovement.ExitWallState();
         };
 
         RaycastHit leftWall;
         if (Physics.Raycast(transform.position, transform.forward * -1, out leftWall, raycastMaxDistance, wallLayer))
         {
-            Debug.Log("Left Wall Detection");
             isOnWall = true;
             isOnLeftWall = true;
             wallHitPoint = leftWall;
@@ -66,6 +79,7 @@ public class WallRun : MonoBehaviour
             isOnLeftWall = false;
             isOnWall = false;
             _playerMovement.ExitWallState();
+
         };
 
     }

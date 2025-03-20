@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,9 +17,14 @@ public class CameraControlPlayer : MonoBehaviour
     [SerializeField] [Range(0,100)] private float sensX = 4.0f;
     [SerializeField] [Range(0, 100)] private float sensY = 2.0f;
     [SerializeField] private float leanAngle = 17.0f;
+    [SerializeField] private float rotateCameraAt = 17.0f;
+    [SerializeField] private float currentLeanAngle = 0.0f;
+    [SerializeField] private float leanSpeed = 1.0f;
+    [SerializeField] private float leanTimeElapsed = 0.0f;
+    [SerializeField] private float leanTimeDuration = 0.5f;
+    [SerializeField] private bool isLeaning = false;
     private float xRotation;
     private float yRotation;
-    
 
     // alter player's rotation y according to the camera
     [SerializeField] private Transform playerOrientation;
@@ -28,14 +34,24 @@ public class CameraControlPlayer : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerMovement.OnCameraLeanTowards += LeanCameraTowards;   
+        PlayerMovement.OnCameraLeanTowards += LeanCameraTowards;
+        PlayerMovement.OnResetCamera += ResetRotation;
+        WallRun.OnStopCameraLerp += StopLeaning;
     }
 
     private void OnDisable()
     {
-        PlayerMovement.OnCameraLeanTowards -= LeanCameraTowards;   
+        PlayerMovement.OnCameraLeanTowards -= LeanCameraTowards;
+        PlayerMovement.OnResetCamera -= ResetRotation;
+        WallRun.OnStopCameraLerp -= StopLeaning;
+    }
+
+    private void StopLeaning()
+    {
+        isLeaning = false;
         
     }
+
     void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -52,7 +68,6 @@ public class CameraControlPlayer : MonoBehaviour
             $"{yRotation}\n Player Speed: " +
             $"{mouseDelta} , Is Taking Input: " +
             $"{isTakingInput}!");
-
         #endif
     }
 
@@ -93,26 +108,53 @@ public class CameraControlPlayer : MonoBehaviour
     private void Update()
     {
         SetCameraRotation();
+        SetCameraLean();
     }
 
+
+    // slowly lerps the camera's z axis to the desired value
+    private void SetCameraLean()
+    {
+        leanTimeElapsed += Time.deltaTime;
+        float leanCompletedPercentage = leanTimeElapsed / leanTimeDuration;
+        if (leanCompletedPercentage == 1)
+        {
+            isLeaning = false;
+        }
+        if (isLeaning) currentLeanAngle = Mathf.Lerp(0, rotateCameraAt, leanCompletedPercentage);
+        if (!isLeaning) currentLeanAngle = Mathf.Lerp(currentLeanAngle, 0, leanCompletedPercentage);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, currentLeanAngle);
+    }
 
     public void LeanCameraTowards(string direction)
     {
         if (direction == "left")
         {
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, leanAngle * -1);
+            rotateCameraAt = leanAngle * -1;
+            isLeaning = true;
+            ResetTimer();
+            
         }
 
         else if (direction == "right")
         {
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, leanAngle);
+            rotateCameraAt = leanAngle;
+            isLeaning = true;
+            ResetTimer();
         }
+    }
+
+    private void ResetTimer()
+    {
+        leanTimeElapsed = 0.0f;
     }
 
     [ContextMenu("Reset Rotation")]
     public void ResetRotation()
     {
-        transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+        ResetTimer();
+        isLeaning = false;
+        rotateCameraAt = 0.0f;
     }
 }
 

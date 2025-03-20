@@ -22,9 +22,6 @@ public class PlayerInputHandler : MonoBehaviour
     private void Awake()
     {
         _inputMaster = new InputMaster();
-        _playerMovement = transform.GetComponentInChildren<PlayerMovement>();
-        _cameraControl = transform.GetComponentInChildren<CameraControlPlayer>();
-        _playerGrapple = transform.GetComponentInChildren<PlayerGrapple>();
         _throwable = transform.GetComponentInChildren<IThrowable>();
         _inputMaster.Player.Move.performed += context => OnMovePerformed(context);
         _inputMaster.Player.Move.canceled += context => OnMoveCanceled();

@@ -15,15 +15,14 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private bool isTakingDamage = false;
     private void OnEnable()
     {
-        BaseDamagable.OnDamagePlayer += OnPlayerDamaged;
+        BaseDamagable.OnHealthChanged += OnPlayerHealthChanged;
     }
 
-    private void OnPlayerDamaged(float amt)
+    private void OnPlayerHealthChanged(float amt)
     {
-        // do not damage if already getting damaged
         if (isTakingDamage) return;
         isTakingDamage = true;
-        this.totalHealth -= amt;
+        this.totalHealth += amt;
     }
 
 

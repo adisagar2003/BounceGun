@@ -5,10 +5,10 @@ using UnityEngine;
 public class BaseDamagable : MonoBehaviour
 {
     public  delegate void DamagePlayer(float amount);
-    public static  event DamagePlayer OnDamagePlayer;
+    public static  event DamagePlayer OnHealthChanged;
 
     protected void TakeDamage(float amount)
     {
-        OnDamagePlayer?.Invoke(amount);
+        OnHealthChanged?.Invoke(amount*-1); // negative for damage
     }
 }

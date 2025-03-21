@@ -22,6 +22,7 @@ public class Shooter : BaseEnemy
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform gunPoint;
     [SerializeField] private float bulletSpeed = 50.0f;
+    [SerializeField] private Vector3 bulletTargetPositionOffset;
 
     public override void Start()
     {
@@ -33,13 +34,14 @@ public class Shooter : BaseEnemy
 
     }
 
+    [ContextMenu("Shoot At Playerrr")]
     public override void ShootAtPlayer()
     {
-        Vector3 directionTowardsPlayer = (gunPoint.transform.position - transform.position).normalized;
-        GameObject bullet = Instantiate(bulletPrefab, gunPoint, false);
+        Vector3 directionTowardsPlayer = (playerRefMovement.GetCurrentPosition() + bulletTargetPositionOffset - transform.position).normalized;
+        GameObject bullet = Instantiate(bulletPrefab);
+        bullet.transform.position = gunPoint.position;
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
-        bulletRigidbody.velocity = directionTowardsPlayer * bulletSpeed;
-
+        bulletRigidbody.velocity = bulletSpeed * directionTowardsPlayer;    
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,7 +54,6 @@ public class Shooter : BaseEnemy
 
     public void LookAtPlayer()
     {
-        Debug.Log("Should look at player");
         if (playerRefMovement == null) return;
         Vector3 transformYPosition = playerRefMovement.GetCurrentPosition();
         transformYPosition.y = transform.position.y;

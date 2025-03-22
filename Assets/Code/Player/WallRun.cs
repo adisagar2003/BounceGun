@@ -32,7 +32,6 @@ public class WallRun : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
 
         _playerMovement = GetComponent<PlayerMovement>();
     }

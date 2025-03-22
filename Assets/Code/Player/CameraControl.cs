@@ -29,6 +29,8 @@ public class CameraControlPlayer : MonoBehaviour
     // alter player's rotation y according to the camera
     [SerializeField] private Transform playerOrientation;
 
+    // for disabling input
+    private bool isCameraControlEnabled = true;
     // debug
     public bool showCameraDebugUI = false;
 
@@ -36,6 +38,7 @@ public class CameraControlPlayer : MonoBehaviour
     {
         PlayerMovement.OnCameraLeanTowards += LeanCameraTowards;
         PlayerMovement.OnResetCamera += ResetRotation;
+        PlayerHealth.OnDeathEvent += DisableCameraControl;
         WallRun.OnStopCameraLerp += StopLeaning;
     }
 
@@ -44,6 +47,7 @@ public class CameraControlPlayer : MonoBehaviour
         PlayerMovement.OnCameraLeanTowards -= LeanCameraTowards;
         PlayerMovement.OnResetCamera -= ResetRotation;
         WallRun.OnStopCameraLerp -= StopLeaning;
+        PlayerHealth.OnDeathEvent -= DisableCameraControl;
     }
 
     private void StopLeaning()
@@ -56,6 +60,22 @@ public class CameraControlPlayer : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    [ContextMenu("Disable Camera Control")]
+    public void DisableCameraControl()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        isCameraControlEnabled = false;
+    }
+
+    [ContextMenu("Enable Camera Control")]
+    public void EnableCameraControl()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        isCameraControlEnabled = true;
     }
 
     #region Debug
@@ -107,6 +127,7 @@ public class CameraControlPlayer : MonoBehaviour
     #endregion
     private void Update()
     {
+        if (!isCameraControlEnabled) return;
         SetCameraRotation();
         SetCameraLean();
     }

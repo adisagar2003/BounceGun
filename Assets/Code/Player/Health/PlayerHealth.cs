@@ -28,14 +28,17 @@ public class PlayerHealth : MonoBehaviour
         BaseDamagable.OnHealthChanged -= OnPlayerHealthChanged;
     }
 
-
+    public float GetCurrentHealth()
+    {
+        return totalHealth;
+    }
 
     private void OnPlayerHealthChanged(float amt)
     {
         if (isTakingDamage) return;
         isTakingDamage = true;
         this.totalHealth += amt;
-        if (totalHealth < 0)
+        if (totalHealth <= 0)
         {
             OnDeathEvent?.Invoke();
         }

@@ -323,5 +323,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ae5c436ee2f2f45bca003953ef8c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyBulletTime: 1.08
-  bulletDamage: 22.4
+  destroyBulletTime: 3.45
+  bulletDamage: 8.1

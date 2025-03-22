@@ -62,6 +62,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDetectionHeight = 0.3f;
     [SerializeField] private RaycastHit slopeHit;
 
+    [Header("Input Disable")]
+    [SerializeField] private bool isMovementEnabled = true;
+    [SerializeField] private float disableTimeElapsed = 0.0f;
+    // used for disabling input for some time
+    // for example wall slide needs input disabled for a certain time after jumping
+    [SerializeField] private float disableTimeDuration = 2.0f;
+
     #region Events
     public delegate void CameraLeanTowards(string direction);
     public static event CameraLeanTowards  OnCameraLeanTowards;
@@ -125,15 +132,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerHealth.OnDeathEvent += DisableAllInputs;
     }
+
 
     private void OnDisable()
     {
+        PlayerHealth.OnDeathEvent -= DisableAllInputs;
+
+    }
+    private void DisableAllInputs()
+    {
+        isMovementEnabled = false;
+    }
+
+    private void EnableAllInputs()
+    {
+        isMovementEnabled = true;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!isMovementEnabled) return;
         PlayerJump();
         MovePlayer();
     }

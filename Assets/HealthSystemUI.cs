@@ -23,4 +23,9 @@ public class HealthSystemUI : MonoBehaviour
         currentHealth += amt;
         healthBar.fillAmount = (currentHealth / totalHealth);
     }
+
+    private void Update()
+    {
+        healthBar.fillAmount = (currentHealth / totalHealth);
+    }
 }

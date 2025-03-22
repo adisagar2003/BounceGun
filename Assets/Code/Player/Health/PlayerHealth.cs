@@ -11,18 +11,34 @@ public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private float totalHealth = 100.0f;
     [SerializeField] private float damageTimeCooldown = 1.0f;
-    private float damageTimeElapsed = 0.0f;
     [SerializeField] private bool isTakingDamage = false;
+    
+    private float damageTimeElapsed = 0.0f;
+
+    public delegate void Death();
+    public static event Death OnDeathEvent;
+
     private void OnEnable()
     {
         BaseDamagable.OnHealthChanged += OnPlayerHealthChanged;
     }
+
+    private void OnDisable()
+    {
+        BaseDamagable.OnHealthChanged -= OnPlayerHealthChanged;
+    }
+
+
 
     private void OnPlayerHealthChanged(float amt)
     {
         if (isTakingDamage) return;
         isTakingDamage = true;
         this.totalHealth += amt;
+        if (totalHealth < 0)
+        {
+            OnDeathEvent?.Invoke();
+        }
     }
 
 

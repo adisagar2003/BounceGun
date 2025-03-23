@@ -5,18 +5,20 @@ using UnityEngine;
 public class FireCommand : ICommand
 {
     private IThrowable _throwable;
+    private PlayerGun _playerGun;
 
-    public FireCommand(IThrowable throwable)
+    public FireCommand(IThrowable throwable, PlayerGun playerGun)
     {
         _throwable = throwable;
+        _playerGun = playerGun;
     }
+
     public void Canceled()
     {
-        // futuer implementation
     }
 
     public void Execute()
     {
-
+        _playerGun.Shoot();
     }
 }

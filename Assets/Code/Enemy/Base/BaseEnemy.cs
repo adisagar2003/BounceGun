@@ -17,6 +17,15 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
         _enemyStateMachine = new EnemyStateMachine();
     }
 
+    protected virtual void OnEnable()
+    {
+        _enemyStateMachine = new EnemyStateMachine();
+    }
+
+    protected virtual void OnDisable()
+    {
+    }
+
     public abstract void ShootAtPlayer();
 
     public virtual void DamagePlayer()
@@ -28,7 +37,16 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     {
 
         health -= amt;
+
+        if (health < 0)
+        {
+            Death();
+        }
     }
 
+    protected virtual void Death()
+    {
+        Destroy(gameObject);
+    }
 
 }

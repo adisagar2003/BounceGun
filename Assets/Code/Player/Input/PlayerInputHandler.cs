@@ -17,13 +17,24 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private CameraControlPlayer _cameraControl;
     [SerializeField] private PlayerGrapple _playerGrapple;
+    [SerializeField] private PlayerGun _playerGun;
     [SerializeField] private IThrowable _throwable;
 
     private void Awake()
     {
+        SetAllInputs();
+
+#if DebugMode
+
+#endif
+    }
+
+    private void SetAllInputs()
+    {
         _playerMovement = transform.GetComponentInChildren<PlayerMovement>();
         _cameraControl = transform.GetComponentInChildren<CameraControlPlayer>();
         _playerGrapple = transform.GetComponentInChildren<PlayerGrapple>();
+        _playerGun = transform.GetComponentInChildren<PlayerGun>();
         _inputMaster = new InputMaster();
         _throwable = transform.GetComponentInChildren<IThrowable>();
         _inputMaster.Player.Move.performed += context => OnMovePerformed(context);
@@ -38,15 +49,19 @@ public class PlayerInputHandler : MonoBehaviour
         _inputMaster.Player.Sprint.canceled += context => OnSprintCanceled();
         _inputMaster.Player.Grapple.performed += context => OnGrapplePerformed();
         _inputMaster.Player.Grapple.canceled += context => OnGrappleCanceled();
-
-    #if DebugMode
-        
-    #endif
     }
 
     private void Start()
     {
-    
+        if (_inputMaster == null)
+        {
+            SetAllInputs();
+        }
+        else
+        {
+            _inputMaster = null;
+            SetAllInputs();
+        }
     }
 
     private void OnGrapplePerformed()
@@ -63,11 +78,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
+        if (_inputMaster == null) SetAllInputs(); 
         _inputMaster.Enable();
     }
 
     private void OnDisable()
     {
+        if (_inputMaster == null) SetAllInputs();
+
         _inputMaster.Disable();
     }
 
@@ -124,7 +142,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnFirePressed()
     {
-        FireCommand fireCommand = new FireCommand(_throwable);
+        FireCommand fireCommand = new FireCommand(_throwable,_playerGun);
         fireCommand.Execute();
     }
 }

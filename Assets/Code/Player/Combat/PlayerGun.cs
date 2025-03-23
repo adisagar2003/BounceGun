@@ -13,6 +13,8 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float damageAmount = 10.0f;
     public delegate void SendDetectionData();
+
+    // future implementation 
     public static event SendDetectionData OnEnemyDetection;
     public static event SendDetectionData OnNoEnemyDetection;
 
@@ -24,9 +26,10 @@ public class PlayerGun : MonoBehaviour
         ,out hit
         ,enemyLayer
         );
-        if (isEnemyDetected)
+        if (hit.transform.gameObject.GetComponent<BaseEnemy>())
         {
             BaseEnemy enemyRef = hit.transform.gameObject.GetComponent<BaseEnemy>();
+            Debug.Log("Target Enemy Should Take Damage");
             if (enemyRef) enemyRef.TakeDamage(damageAmount);
         }
     }
@@ -40,16 +43,15 @@ public class PlayerGun : MonoBehaviour
     {
         RaycastHit hit;
         bool isEnemyDetected = Physics.Raycast(_cameraRef.ViewportPointToRay(new Vector3(0.5f,0.5f,0f)), out hit, enemyLayer);
-        Debug.Log(isEnemyDetected);
-        Debug.Log((hit.transform.gameObject.layer) + "-Bool val");
+        if (!isEnemyDetected) return;
         if (isEnemyDetected && hit.transform.gameObject.layer == 8)
         {
           
             // Send signal to crosshair UI to become red
-            OnEnemyDetection?.Invoke();
+            //OnEnemyDetection?.Invoke();
         } else
         {
-            OnNoEnemyDetection?.Invoke();
+            //OnNoEnemyDetection?.Invoke();
         }
     }
 

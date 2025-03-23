@@ -23,15 +23,30 @@ public class Shooter : BaseEnemy
     [SerializeField] private Transform gunPoint;
     [SerializeField] private float bulletSpeed = 50.0f;
     [SerializeField] private Vector3 bulletTargetPositionOffset;
+    [SerializeField] private float deathCooldown = 2.4f;
 
+    private Animator _shooterAnimator;
     public override void Start()
     {
         base.Start();
         playerRefMovement = playerRef.GetComponentInChildren<PlayerMovement>();
+        _shooterAnimator = GetComponent<Animator>();
+        InitializeStateMachine();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        InitializeStateMachine();
+    }
+
+
+
+    private void InitializeStateMachine()
+    {
         _shooterIdleState = new ShooterIdleState("Idle", this, _enemyStateMachine);
         _shooterShootState = new ShooterShootState("Shoot", this, _enemyStateMachine);
         _enemyStateMachine.Initialize(_shooterIdleState);
-
     }
 
     [ContextMenu("Shoot At Playerrr")]
@@ -46,10 +61,12 @@ public class Shooter : BaseEnemy
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _enemyStateMachine.ChangeState(_shooterShootState);
-        }
+      
+    }
+
+    public void AlertShooter()
+    {
+        _enemyStateMachine.ChangeState(_shooterShootState);
     }
 
     public void LookAtPlayer()
@@ -74,6 +91,18 @@ public class Shooter : BaseEnemy
         {
             _enemyStateMachine.ChangeState(_shooterIdleState);
         }
+    }
+
+    protected override void Death()
+    {
+        _shooterAnimator.enabled = false;
+        StartCoroutine(DeathCoroutine());
+    }
+
+    private IEnumerator DeathCoroutine()
+    {
+        yield return new WaitForSeconds(deathCooldown);
+        Destroy(gameObject);
     }
 
     private void Update()

@@ -24,5 +24,11 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
 
     }
 
+    public virtual void TakeDamage(float amt)
+    {
+
+        health -= amt;
+    }
+
 
 }

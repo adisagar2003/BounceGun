@@ -7,6 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Helps in sending Camera data as events.
+/// </summary>
 public class CameraUtils : MonoBehaviour
 {
     private Camera _mainCamera;

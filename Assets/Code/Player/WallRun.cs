@@ -22,6 +22,7 @@ public class WallRun : MonoBehaviour
     [SerializeField] public float wallJumpForceVertical = 20.0f;
     [SerializeField] public float wallGravity = 4.0f;
     [SerializeField] public float wallRunSpeedBoost = 10.0f;
+  
 
     #region Events
     public delegate void StopCameraLerp();
@@ -32,7 +33,6 @@ public class WallRun : MonoBehaviour
 
     private void Awake()
     {
-
         _playerMovement = GetComponent<PlayerMovement>();
     }
     private void Update()

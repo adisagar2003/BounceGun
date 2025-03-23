@@ -51,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isReadyToJump = true;
     [SerializeField] private bool jumpInputPressed = false;
     [SerializeField] private float jumpCooldown = 0.5f;
+    [SerializeField] private float wallJumpCooldown = 0.5f;
     [SerializeField] private float sprintBoost = 5.5f;
 
     [Header("Input")]
@@ -387,7 +388,7 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        // Walljump: Direction will be normal towards plance...
+        // Walljump: Direction will be normal towards plane...
         else if (currentState == PlayerMovementState.WallRun && isReadyToJump && jumpInputPressed)
         {
         #if DEBUGMODE
@@ -396,9 +397,17 @@ public class PlayerMovement : MonoBehaviour
 
             isReadyToJump = false;
             _rb.useGravity = true;
+            DisableAllInputs();
+            StartCoroutine(EnableInputAgain());
             _rb.AddForce(_playerWallRun.GetWallHitPointNormal() * _playerWallRun.wallJumpForceHorizontal, ForceMode.Impulse);
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+    }
+
+    private IEnumerator EnableInputAgain()
+    {
+        yield return new WaitForSeconds(wallJumpCooldown);
+        EnableAllInputs();
     }
 
     // ground check 

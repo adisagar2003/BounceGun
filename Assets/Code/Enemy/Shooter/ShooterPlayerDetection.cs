@@ -11,6 +11,7 @@ public class ShooterPlayerDetection : MonoBehaviour
        if (collision.CompareTag("Player"))
         {
             shooter.AlertShooter();
-        }    
+        }  
     }
+
 }

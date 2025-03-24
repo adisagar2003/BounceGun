@@ -11,7 +11,8 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     protected EnemyStateMachine _enemyStateMachine;
     // enemy needs to have at least one state
     protected BaseEnemyState baseEnemyState;
-    
+    [SerializeField] protected Material materialOnDeath;
+
     public virtual void Start()
     {
         _enemyStateMachine = new EnemyStateMachine();
@@ -47,6 +48,15 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     protected virtual void Death()
     {
         Destroy(gameObject);
+    }
+
+    protected virtual void ChangeMaterialTo(Material targetMaterial)
+    {
+        SkinnedMeshRenderer meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        if (meshRenderer != null)
+        {
+            meshRenderer.material = targetMaterial;
+        }
     }
 
 }

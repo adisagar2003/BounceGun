@@ -1809,6 +1809,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1676831429412873536, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 4918217319983852589, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
+        type: 3}
     - target: {fileID: 5866666021909216657, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
       propertyPath: m_Enabled
@@ -2039,6 +2045,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e85c077dc9d4b2439ab7ed1a4eb152d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialOnDeath: {fileID: -876546973899608171, guid: d4b784787373d214ea43a694a283a701,
+    type: 3}
   playerRef: {fileID: 1726303264}
   rotatingSpeed: 5
   bulletTimeElapsed: 0
@@ -2048,6 +2056,8 @@ MonoBehaviour:
   bulletSpeed: 29
   bulletTargetPositionOffset: {x: 0, y: -1, z: 0}
   deathCooldown: 2.4
+  materialChangeCooldown: 1.4
+  materialOnDeath: {fileID: 0}
 --- !u!4 &431145416 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,

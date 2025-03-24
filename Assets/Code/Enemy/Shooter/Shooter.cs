@@ -24,6 +24,8 @@ public class Shooter : BaseEnemy
     [SerializeField] private float bulletSpeed = 50.0f;
     [SerializeField] private Vector3 bulletTargetPositionOffset;
     [SerializeField] private float deathCooldown = 2.4f;
+    [SerializeField] private float materialChangeCooldown = 1.4f;
+
 
     private Animator _shooterAnimator;
     public override void Start()
@@ -93,11 +95,27 @@ public class Shooter : BaseEnemy
         }
     }
 
+
+    [ContextMenu("Kill Shooter")]
     protected override void Death()
     {
         _shooterAnimator.enabled = false;
+        foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
+        {
+            rbChild.useGravity = false;
+        };
+        StartCoroutine(ChangeMaterialCoroutine());
         StartCoroutine(DeathCoroutine());
     }
+
+    private IEnumerator ChangeMaterialCoroutine()
+    {
+        yield return new WaitForSeconds(materialChangeCooldown);
+        Debug.Log("Material Should Change");
+        ChangeMaterialTo(materialOnDeath);
+    }
+
+  
 
     private IEnumerator DeathCoroutine()
     {

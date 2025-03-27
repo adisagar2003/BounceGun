@@ -37,4 +37,16 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    #region Main Menu
+    public void StartGame()
+    {
+        SceneManager.LoadScene("PlayerMovementTesting");
+    }
+
+    public void EndGame()
+    {
+        Application.Quit();
+    }
+    #endregion
 }

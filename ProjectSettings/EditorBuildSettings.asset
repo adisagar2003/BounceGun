@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlayerMovementTesting.unity
     guid: 2ddf7efffd625764ebd1e4b297dd83be
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 2dc8451917d04cf4480766843d5825fb
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e28334f8551e5ab45a816a1626e800fe,
       type: 2}

@@ -138,6 +138,8 @@ public class PlayerInputHandler : MonoBehaviour
     }
     private void OnFireCancelled()
     {
+        FireCommand fireCommand = new FireCommand(_throwable, _playerGun);
+        fireCommand.Canceled();
     }
 
     private void OnFirePressed()

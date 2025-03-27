@@ -15,10 +15,11 @@ public class FireCommand : ICommand
 
     public void Canceled()
     {
+        _playerGun.ShootIsReleased();
     }
 
     public void Execute()
     {
-        _playerGun.Shoot();
+        _playerGun.ShootButtonPressed();
     }
 }

@@ -31,6 +31,7 @@ public class Shooter : BaseEnemy
     public override void Start()
     {
         base.Start();
+        playerRef = GameObject.FindGameObjectWithTag("Player");
         playerRefMovement = playerRef.GetComponentInChildren<PlayerMovement>();
         _shooterAnimator = GetComponent<Animator>();
         InitializeStateMachine();
@@ -99,11 +100,12 @@ public class Shooter : BaseEnemy
     [ContextMenu("Kill Shooter")]
     protected override void Death()
     {
-        _shooterAnimator.enabled = false;
         foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
         {
             rbChild.useGravity = false;
         };
+        _enemyStateMachine.ChangeState(_shooterIdleState);
+        _shooterAnimator.enabled = false;
         StartCoroutine(ChangeMaterialCoroutine());
         StartCoroutine(DeathCoroutine());
     }

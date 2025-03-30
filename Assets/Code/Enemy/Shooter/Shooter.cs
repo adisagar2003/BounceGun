@@ -14,9 +14,9 @@ public class Shooter : BaseEnemy
 {
     private ShooterIdleState _shooterIdleState;
     private ShooterShootState _shooterShootState;
+    private PlayerMovement playerRefMovement;
 
     [SerializeField] private GameObject playerRef;
-    private PlayerMovement playerRefMovement;
     [SerializeField] private float rotatingSpeed = 5.0f; 
     [SerializeField] private float bulletTimeElapsed = 0.0f;
     [SerializeField] private GameObject bulletPrefab;

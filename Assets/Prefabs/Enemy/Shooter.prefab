@@ -157,17 +157,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -193.94249
+      value: -1.9336603
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.73
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.463672
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
@@ -269,6 +269,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6435367378320576314}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 184382527684334346}
     - targetCorrespondingSourceObject: {fileID: -8050092569438519036, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
       insertIndex: -1
@@ -736,6 +740,33 @@ CapsuleCollider:
   m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.67, z: 0}
+--- !u!54 &184382527684334346
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049333717583889516}
+  serializedVersion: 4
+  m_Mass: 54
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &2718623833527397803 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5401040807533538154, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,

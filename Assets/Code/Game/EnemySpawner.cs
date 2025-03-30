@@ -5,14 +5,17 @@ using UnityEngine;
 
 /// <summary>
 /// Put in Triggers
-/// On Trigger Enter, Spawn enemies in random areas 
+/// On Trigger Enter, Spawn enemies in random areas
+/// Need to assign transforms manually for spawn points and list of enemies
 /// inside the system
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<GameObject> enemiesToSpawn;
+    [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private bool isEnemySpawned;
 
+    private int spawnPointIndex = 0;
     // Start is called before the first frame update
     void Start()
     {    
@@ -43,11 +46,8 @@ public class EnemySpawner : MonoBehaviour
 
             foreach (GameObject enemy in enemiesToSpawn)
             {
-                Debug.Log(RandomPointInBounds(other.bounds));
-                enemy.transform.position = Random.insideUnitSphere * 5;
-                // reset y position to ground.
-                enemy.transform.position = new Vector3(enemy.transform.position.x, transform.position.y, transform.position.z);
-                Instantiate(enemy, enemy.transform.position, Quaternion.identity);
+                // make the enemy spawn
+                Instantiate(enemy, spawnPoints[spawnPointIndex++].position, Quaternion.identity);
             }
 
         }

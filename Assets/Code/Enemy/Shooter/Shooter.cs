@@ -31,7 +31,7 @@ public class Shooter : BaseEnemy
     public override void Start()
     {
         base.Start();
-        playerRef = GameObject.FindGameObjectWithTag("Player");
+        playerRef = GameObject.Find("Player");
         playerRefMovement = playerRef.GetComponentInChildren<PlayerMovement>();
         _shooterAnimator = GetComponent<Animator>();
         InitializeStateMachine();
@@ -100,6 +100,7 @@ public class Shooter : BaseEnemy
     [ContextMenu("Kill Shooter")]
     protected override void Death()
     {
+        GetComponent<Rigidbody>().useGravity = false;
         foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
         {
             rbChild.useGravity = false;

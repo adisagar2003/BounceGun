@@ -101,10 +101,10 @@ public class Shooter : BaseEnemy
     protected override void Death()
     {
         GetComponent<Rigidbody>().useGravity = false;
-        foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
-        {
-            rbChild.useGravity = false;
-        };
+        //foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
+        //{
+        //    rbChild.useGravity = false;
+        //};
         _enemyStateMachine.ChangeState(_shooterIdleState);
         _shooterAnimator.enabled = false;
         StartCoroutine(ChangeMaterialCoroutine());

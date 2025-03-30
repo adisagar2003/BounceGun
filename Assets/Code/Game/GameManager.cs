@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject GameOverPanel;
-
+    [SerializeField] private bool isPaused = false;
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -47,6 +47,28 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         Application.Quit();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (isPaused)
+            {
+                Time.timeScale = 1;
+                isPaused = false;   
+            }
+
+           else
+            {
+                Debug.Log("Pause Game");
+                isPaused = true;
+                Time.timeScale = 0;
+            }
+         
+        }
+
+
     }
     #endregion
 }

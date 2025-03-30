@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Handles Player Input.
+/// 
 /// </summary>
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -23,19 +24,15 @@ public class PlayerInputHandler : MonoBehaviour
     private void Awake()
     {
         SetAllInputs();
-
-#if DebugMode
-
-#endif
     }
 
     private void SetAllInputs()
     {
+        _inputMaster = new InputMaster();
         _playerMovement = transform.GetComponentInChildren<PlayerMovement>();
         _cameraControl = transform.GetComponentInChildren<CameraControlPlayer>();
         _playerGrapple = transform.GetComponentInChildren<PlayerGrapple>();
         _playerGun = transform.GetComponentInChildren<PlayerGun>();
-        _inputMaster = new InputMaster();
         _throwable = transform.GetComponentInChildren<IThrowable>();
         _inputMaster.Player.Move.performed += context => OnMovePerformed(context);
         _inputMaster.Player.Move.canceled += context => OnMoveCanceled();
@@ -53,15 +50,6 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void Start()
     {
-        if (_inputMaster == null)
-        {
-            SetAllInputs();
-        }
-        else
-        {
-            _inputMaster = null;
-            SetAllInputs();
-        }
     }
 
     private void OnGrapplePerformed()
@@ -78,15 +66,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_inputMaster == null) SetAllInputs(); 
+        SetAllInputs();
         _inputMaster.Enable();
     }
 
     private void OnDisable()
     {
-        if (_inputMaster == null) SetAllInputs();
 
-        _inputMaster.Disable();
+        _inputMaster?.Disable();
     }
 
     private void OnSprintCanceled()

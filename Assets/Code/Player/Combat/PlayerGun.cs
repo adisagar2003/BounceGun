@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Shooting, Enemy Detection
+/// Shooting, Enemy Detection, Gun VFX Generation
+/// Attaches to Player FP Physics Object
 /// </summary>
 public class PlayerGun : MonoBehaviour
 {
@@ -14,12 +15,19 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private float damageAmount = 10.0f;
     [SerializeField] private bool isShootPressed = false;
     [SerializeField] private float shootDelay = 0.3f;
-    [SerializeField] private ParticleSystem spark;
+    [SerializeField] private GameObject spark;
+    [SerializeField] private Transform gunTip;
+    [SerializeField] private AudioSource gunShotAudio;
     public delegate void SendDetectionData();
 
     // future implementation 
     public static event SendDetectionData OnEnemyDetection;
     public static event SendDetectionData OnNoEnemyDetection;
+
+    private void Start()
+    {
+    }
+
 
     public void ShootIsReleased()
     {
@@ -36,22 +44,26 @@ public class PlayerGun : MonoBehaviour
     public void Shoot()
     {
         RaycastHit hit;
-        spark.Play();
+        Instantiate(spark, gunTip, false);
+        gunShotAudio.Play();
         bool isEnemyDetected = Physics.Raycast
         (_cameraRef.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f))
         ,out hit
         ,enemyLayer
         );
-        if (hit.transform.gameObject.GetComponent<BaseEnemy>())
+        if (!hit.Equals(null))
         {
-            BaseEnemy enemyRef = hit.transform.gameObject.GetComponent<BaseEnemy>();
-            Debug.Log("Target Enemy Should Take Damage");
-            if (enemyRef) enemyRef.TakeDamage(damageAmount);
+
+            if (hit.transform.gameObject.GetComponent<BaseEnemy>())
+            {
+                BaseEnemy enemyRef = hit.transform.gameObject.GetComponent<BaseEnemy>();
+                Debug.Log("Target Enemy Should Take Damage");
+                if (enemyRef) enemyRef.TakeDamage(damageAmount);
+            }
         }
 
         if (isShootPressed)
         {
-            Invoke(nameof(Shoot), shootDelay);
         }
     }
 

@@ -45,9 +45,15 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
         }
     }
 
+
     protected virtual void Death()
     {
         Destroy(gameObject);
+    }
+
+    public virtual float GetHealth()
+    {
+        return health;
     }
 
     protected virtual void ChangeMaterialTo(Material targetMaterial)

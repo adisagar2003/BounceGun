@@ -15,7 +15,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private float damageAmount = 10.0f;
     [SerializeField] private bool isShootPressed = false;
     [SerializeField] private float shootDelay = 0.3f;
-    [SerializeField] private GameObject spark;
+    [SerializeField] private GameObject smoke;
     [SerializeField] private Transform gunTip;
     [SerializeField] private AudioSource gunShotAudio;
     public delegate void SendDetectionData();
@@ -26,6 +26,7 @@ public class PlayerGun : MonoBehaviour
 
     private void Start()
     {
+
     }
 
 
@@ -44,14 +45,14 @@ public class PlayerGun : MonoBehaviour
     public void Shoot()
     {
         RaycastHit hit;
-        Instantiate(spark, gunTip, false);
+        Instantiate(smoke, gunTip, false);
         gunShotAudio.Play();
         bool isEnemyDetected = Physics.Raycast
         (_cameraRef.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f))
-        ,out hit
-        ,enemyLayer
+        , out hit
+        , enemyLayer
         );
-        if (!hit.Equals(null))
+        if (isEnemyDetected)
         {
 
             if (hit.transform.gameObject.GetComponent<BaseEnemy>())
@@ -65,6 +66,7 @@ public class PlayerGun : MonoBehaviour
         if (isShootPressed)
         {
         }
+
     }
 
     private void Update()

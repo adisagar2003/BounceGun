@@ -23,12 +23,12 @@ public class PlayerGrapple : MonoBehaviour
 
     [Header("Grapple Controls")]
     [SerializeField] private float grappleTimeElapsed = 0.0f;
-    [SerializeField] private float maxGrappleDistance = 5000.3f;
+    [SerializeField] private float maxGrappleDistance = 40.3f;
     [SerializeField] private float grappleDuration = 1.2f;
     [SerializeField] private float grappleHeightOffset = 3.2f;
     [Header("Grapple Speed")]
-    [SerializeField] private float grappleLinearForce = 310.2f;
-    [SerializeField] private float stopGrappleAtThisDistance = 10.0f;
+    [SerializeField] private float grappleLinearForce = 500.2f;
+    [SerializeField] private float stopGrappleAtThisDistance = 2.2f;
     
     [Header("Grapple Points")]
     [SerializeField] private LayerMask whatIsGrappable;
@@ -36,15 +36,14 @@ public class PlayerGrapple : MonoBehaviour
     [SerializeField] private Camera cam;
 
     [Header("Line Handle")]
-    [SerializeField] private GameObject lineRendererComponent;
     [SerializeField] private LineRenderer lineRenderer;
 
     private void Awake()
     {
        
-        lineRenderer = lineRendererComponent.GetComponentInChildren<LineRenderer>();
+        lineRenderer = GetComponentInChildren<LineRenderer>();
         _playerMovement = GetComponent<PlayerMovement>();
-        lineRenderer.enabled = false;
+        lineRenderer.enabled = true;
     }
     public void SetIsGrappleKeyPressed(bool value)
     {
@@ -60,7 +59,6 @@ public class PlayerGrapple : MonoBehaviour
         if (Physics.Raycast(cam.transform.position,cam.transform.forward, out hit, maxGrappleDistance,whatIsGrappable))
         {
             grappleHitPoint = hit.point;
-            DrawLineToHitPoint();
             ExecuteGrapple();
         }
     }
@@ -68,7 +66,7 @@ public class PlayerGrapple : MonoBehaviour
     // draw lineRenderer to `hit point` from gun tip to hit point
     private void DrawLineToHitPoint()
     {
-        lineRenderer.SetPosition(0, gunTip.transform.position);
+        lineRenderer.SetPosition(0, transform.position);
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(1, grappleHitPoint);
     }
@@ -82,20 +80,20 @@ public class PlayerGrapple : MonoBehaviour
     {
         isGrappling = false;
         grappleTimeElapsed = 0.0f;
-        ResetLineRenderer();
         Debug.Log("GrappleStopped");
     }
 
     private void ResetLineRenderer()
     {
         lineRenderer.SetPosition(1, lineRenderer.GetPosition(0));
-        lineRenderer.enabled = false;
+        lineRenderer.enabled = true;
     }
     private void LateUpdate()
     {
         if (isGrappling)
         {
-            lineRenderer.SetPosition(0, gunTip.position);
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, grappleHitPoint);
         }   
     }
 
@@ -123,6 +121,7 @@ public class PlayerGrapple : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position + new Vector3(maxGrappleDistance, 0, 0), 5.0f);
+        Gizmos.DrawWireSphere(grappleHitPoint, 5.0f);
     }
     private void OnGUI()
     {

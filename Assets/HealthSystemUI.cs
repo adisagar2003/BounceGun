@@ -4,18 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
 /// Controls View of Health UI
-/// Depenendies 
+/// Attaches to Healthbar Component of canvas
 /// </summary>
 public class HealthSystemUI : MonoBehaviour
 {
     private PlayerHealth _playerHealth;
     [SerializeField] private float totalHealth = 100.0f;
     [SerializeField] private float currentHealth = 100.0f;
-    [SerializeField] private Image healthBar;
+    [SerializeField] private Slider healthSlider;
 
     private void Awake()
     {
-        _playerHealth = GameObject.FindFirstObjectByType<PlayerHealth>();
+        _playerHealth = FindFirstObjectByType<PlayerHealth>();
     }
     
     private void OnEnable()
@@ -25,13 +25,13 @@ public class HealthSystemUI : MonoBehaviour
 
     private void Start()
     {
-        healthBar.fillAmount = (_playerHealth.GetCurrentHealth() / totalHealth);
+        healthSlider.value = (_playerHealth.GetCurrentHealth());
     }
 
     private void OnHealthUpdate(float amt)
     {
         currentHealth += amt;
-        healthBar.fillAmount = (_playerHealth.GetCurrentHealth() / totalHealth);
+        healthSlider.value = _playerHealth.GetCurrentHealth();
     }
 
     private void Update()

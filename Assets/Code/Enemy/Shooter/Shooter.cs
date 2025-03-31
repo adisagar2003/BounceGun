@@ -25,6 +25,7 @@ public class Shooter : BaseEnemy
     [SerializeField] private Vector3 bulletTargetPositionOffset;
     [SerializeField] private float deathCooldown = 2.4f;
     [SerializeField] private float materialChangeCooldown = 1.4f;
+    public float distanceOfDetection = 6f;
 
 
     private Animator _shooterAnimator;
@@ -41,6 +42,13 @@ public class Shooter : BaseEnemy
     {
         base.OnEnable();
         InitializeStateMachine();
+    }
+
+
+    public float GetDistanceFromPlayer()
+    {
+        Vector3 playerPosition = playerRef.GetComponentInChildren<PlayerMovement>().GetCurrentPosition();
+        return Vector3.Distance(playerPosition, transform.position);
     }
 
 

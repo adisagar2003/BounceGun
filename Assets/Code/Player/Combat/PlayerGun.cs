@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,14 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private GameObject smoke;
     [SerializeField] private Transform gunTip;
     [SerializeField] private AudioSource gunShotAudio;
+
+    [Header("Ammo")]
+    [SerializeField] public int ammoNotInClip = 100;
+    [SerializeField] public int currentAmmoOnClip = 13;
+    [SerializeField] public int clipSize = 13;
+    [SerializeField] public bool isReloading = false;
+    [SerializeField] private float reloadDelay ;
+
     public delegate void SendDetectionData();
 
     // future implementation 
@@ -42,8 +51,63 @@ public class PlayerGun : MonoBehaviour
         Shoot();
     }
 
-    public void Shoot()
+
+    [ContextMenu("Reload")]
+    private void Reload()
     {
+        StartCoroutine(StartReload());
+        Debug.Log("Reload Called \n" + $"{currentAmmoOnClip}/{ammoNotInClip}");
+
+    }
+
+    private void FillClip()
+    {
+        // fill the clip completely 
+        if (ammoNotInClip < 1)
+        {
+            Debug.Log("Out of ammo ");
+            return;
+        }
+
+        
+        if (ammoNotInClip + currentAmmoOnClip > clipSize)
+        {
+            // amount needed to fill clip
+            int amountNeededToFillClip = clipSize - currentAmmoOnClip;
+            ammoNotInClip -= amountNeededToFillClip;
+            currentAmmoOnClip = currentAmmoOnClip + amountNeededToFillClip;
+        }
+        else if (ammoNotInClip + currentAmmoOnClip < clipSize)
+        {
+            currentAmmoOnClip = currentAmmoOnClip + ammoNotInClip;
+            ammoNotInClip = 0;
+
+        }
+       
+    }
+
+    private IEnumerator StartReload()
+    {
+
+        isReloading = true;
+        yield return new WaitForSeconds(reloadDelay);
+        FillClip();
+        isReloading = false;
+    }
+
+    private void Shoot()
+    {
+        if (isReloading) return;
+        if (currentAmmoOnClip == 0 && ammoNotInClip == 0) return;
+        // do not shoot if there is no ammo 
+        if (currentAmmoOnClip < 1) {    
+            Reload();
+            return;
+        }
+
+        // reduce ammo amount;
+        currentAmmoOnClip -= 1; 
+       
         RaycastHit hit;
         Instantiate(smoke, gunTip, false);
         gunShotAudio.Play();
@@ -71,24 +135,22 @@ public class PlayerGun : MonoBehaviour
 
     private void Update()
     {
-        EnemyDetection();
+
     }
 
-    private void EnemyDetection()
-    {
-        RaycastHit hit;
-        bool isEnemyDetected = Physics.Raycast(_cameraRef.ViewportPointToRay(new Vector3(0.5f,0.5f,0f)), out hit, enemyLayer);
-        if (!isEnemyDetected) return;
-        if (isEnemyDetected && hit.transform.gameObject.layer == 8)
-        {
+    //private void EnemyDetection()
+    //{
+    //    RaycastHit hit;
+    //    bool isEnemyDetected = Physics.Raycast(_cameraRef.ViewportPointToRay(new Vector3(0.5f,0.5f,0f)), out hit, enemyLayer);
+    //    if (!isEnemyDetected) return;
+    //    if (isEnemyDetected && hit.transform.gameObject.layer == 8)
+    //    {
           
-            // Send signal to crosshair UI to become red
-            //OnEnemyDetection?.Invoke();
-        } else
-        {
-            //OnNoEnemyDetection?.Invoke();
-        }
-    }
+    //    } else
+    //    {
+    //        //OnNoEnemyDetection?.Invoke();
+    //    }
+    //}
 
     private void OnDrawGizmos()
     {

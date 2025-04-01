@@ -26,7 +26,7 @@ public class Shooter : BaseEnemy
     [SerializeField] private float deathCooldown = 2.4f;
     [SerializeField] private float materialChangeCooldown = 1.4f;
     public float distanceOfDetection = 6f;
-
+    
 
     private Animator _shooterAnimator;
     public override void Start()

@@ -33,6 +33,21 @@ public class PlayerGun : MonoBehaviour
     public static event SendDetectionData OnEnemyDetection;
     public static event SendDetectionData OnNoEnemyDetection;
 
+    private void OnEnable()
+    {
+        Ammo.OnAddAmmo += AddAmmo;
+    }
+
+    private void OnDisable()
+    {
+        Ammo.OnAddAmmo -= AddAmmo;
+    }
+
+    private void AddAmmo(int amount)
+    {
+        ammoNotInClip += amount;
+    }
+
     private void Start()
     {
 

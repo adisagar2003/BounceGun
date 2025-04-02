@@ -108,6 +108,8 @@ public class Shooter : BaseEnemy
     [ContextMenu("Kill Shooter")]
     protected override void Death()
     {
+        if (isDeathCalled) return;
+        isDeathCalled = true;
         GetComponent<Rigidbody>().useGravity = false;
         //foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
         //{
@@ -115,6 +117,7 @@ public class Shooter : BaseEnemy
         //};
         _enemyStateMachine.ChangeState(_shooterIdleState);
         _shooterAnimator.enabled = false;
+        SpawnRandomPowerup();
         StartCoroutine(ChangeMaterialCoroutine());
         StartCoroutine(DeathCoroutine());
     }

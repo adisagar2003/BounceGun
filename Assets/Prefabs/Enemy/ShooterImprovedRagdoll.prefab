@@ -2814,6 +2814,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialOnDeath: {fileID: -876546973899608171, guid: d4b784787373d214ea43a694a283a701,
     type: 3}
+  powerups:
+  - {fileID: 7339834855155748989, guid: 8c51d376e71ff2845a6b4e2d3a87186c, type: 3}
+  powerupSpawnOffset: {x: 0, y: 3.85, z: 0}
   playerRef: {fileID: 0}
   rotatingSpeed: 5
   bulletTimeElapsed: 0

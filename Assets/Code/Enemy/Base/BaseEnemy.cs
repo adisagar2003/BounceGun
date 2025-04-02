@@ -12,6 +12,9 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     // enemy needs to have at least one state
     protected BaseEnemyState baseEnemyState;
     [SerializeField] protected Material materialOnDeath;
+    [SerializeField] protected List<GameObject> powerups;
+    protected bool isDeathCalled = false;
+    [SerializeField] protected Vector3 powerupSpawnOffset = new Vector3(0, 1.0f, 0);
 
     public virtual void Start()
     {
@@ -48,7 +51,18 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
 
     protected virtual void Death()
     {
+        // prevents 
+        if (isDeathCalled) return;
+        isDeathCalled = true;
+        // instantiate a random powerup on this location
+        SpawnRandomPowerup();
         Destroy(gameObject);
+    }
+
+    protected void SpawnRandomPowerup()
+    {
+        int r = UnityEngine.Random.Range(0, powerups.Count - 1);
+        Instantiate(powerups[r], transform.position + powerupSpawnOffset, Quaternion.identity);
     }
 
     public virtual float GetHealth()

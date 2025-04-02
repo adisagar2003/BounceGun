@@ -97,9 +97,9 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 8851312704703305948}
   - component: {fileID: 3513504654325600899}
   - component: {fileID: 7975819995245466614}
+  - component: {fileID: -2372444792969642827}
   m_Layer: 0
   m_Name: AmmoPowerup
   m_TagString: Untagged
@@ -262,6 +263,33 @@ MonoBehaviour:
   floatAmplitude: 0.06
   powerupMoveSpeed: 10
   ammo: 10
+--- !u!54 &-2372444792969642827
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7339834855155748989}
+  serializedVersion: 4
+  m_Mass: 2.35
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &8940438792031630862
 GameObject:
   m_ObjectHideFlags: 0

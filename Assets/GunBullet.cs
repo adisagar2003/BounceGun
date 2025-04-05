@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles destruction of the bullet
+/// </summary>
 public class GunBullet : BaseDamagable
 {
     [SerializeField] private float destroyBulletTime = 2.0f;

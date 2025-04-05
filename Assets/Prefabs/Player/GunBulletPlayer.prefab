@@ -148,7 +148,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
+  m_Time: 4.24
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -157,17 +157,17 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.1182664
-        value: 0.024124146
-        inSlope: 0
-        outSlope: 0
+        time: 0.15089732
+        value: 0.012123108
+        inSlope: 0.5467854
+        outSlope: 0.5467854
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 1
       - serializedVersion: 3
-        time: 0.40744907
-        value: 0.068344116
+        time: 0.34684116
+        value: 0.43198395
         inSlope: 0.29995176
         outSlope: 0.29995176
         tangentMode: 0
@@ -175,8 +175,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.7890509
-        value: 0.04421693
+        time: 0.83101255
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 3619933003965149887}
   - component: {fileID: 2243397894823480864}
   m_Layer: 3
-  m_Name: GunBullet
+  m_Name: GunBulletPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -257,8 +257,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5074452014132706439}
   m_Father: {fileID: 0}
@@ -271,7 +271,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5277131385598567019}
   serializedVersion: 4
-  m_Mass: 0.33
+  m_Mass: 0.11
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -282,10 +282,10 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_ImplicitTensor: 0
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -323,5 +323,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ae5c436ee2f2f45bca003953ef8c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyBulletTime: 3.45
+  destroyBulletTime: 4.58
   bulletDamage: 8.1

@@ -27,7 +27,16 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] public bool isReloading = false;
     [SerializeField] private float reloadDelay ;
 
+
+    [Header("Damage")]
+    [SerializeField] private GameObject sparkPrefab;
+    [SerializeField] private float particleHeightOffset = 3.0f;
+
+    [Header("Particle FX")]
+    [SerializeField] private GameObject bulletPrefab;
     public delegate void SendDetectionData();
+    [SerializeField] private float bulletAdditionalForce = 10.0f;
+    [SerializeField] private Vector3 bulletScale;
 
     // future implementation 
     public static event SendDetectionData OnEnemyDetection;
@@ -92,11 +101,12 @@ public class PlayerGun : MonoBehaviour
             ammoNotInClip -= amountNeededToFillClip;
             currentAmmoOnClip = currentAmmoOnClip + amountNeededToFillClip;
         }
+
+        // Fill ammo if total ammo is less than the clip size
         else if (ammoNotInClip + currentAmmoOnClip < clipSize)
         {
             currentAmmoOnClip = currentAmmoOnClip + ammoNotInClip;
             ammoNotInClip = 0;
-
         }
        
     }
@@ -115,15 +125,20 @@ public class PlayerGun : MonoBehaviour
         if (isReloading) return;
         if (currentAmmoOnClip == 0 && ammoNotInClip == 0) return;
         // do not shoot if there is no ammo 
-        if (currentAmmoOnClip < 1) {    
+        if (currentAmmoOnClip < 1)
+        {
             Reload();
             return;
         }
 
         // reduce ammo amount;
-        currentAmmoOnClip -= 1; 
-       
+        currentAmmoOnClip -= 1;
+
+
+
         RaycastHit hit;
+        // instantiate bullet from guntip
+        BulletTrailInstantiate();
         Instantiate(smoke, gunTip, false);
         gunShotAudio.Play();
         bool isEnemyDetected = Physics.Raycast
@@ -139,6 +154,9 @@ public class PlayerGun : MonoBehaviour
                 BaseEnemy enemyRef = hit.transform.gameObject.GetComponent<BaseEnemy>();
                 Debug.Log("Target Enemy Should Take Damage");
                 if (enemyRef) enemyRef.TakeDamage(damageAmount);
+                // Instantiate a spark particle system at hit position
+                GameObject sparkFX = Instantiate(sparkPrefab, hit.point, Quaternion.identity);
+                sparkFX.transform.LookAt(_cameraRef.transform.position);
             }
         }
 
@@ -146,6 +164,14 @@ public class PlayerGun : MonoBehaviour
         {
         }
 
+    }
+
+    private void BulletTrailInstantiate()
+    {
+        Debug.Log("Bullet should instantiate");
+        GameObject bullet = Instantiate(bulletPrefab, gunTip.position, Quaternion.identity);
+        bullet.transform.localScale = bulletScale;
+        bullet.GetComponent<Rigidbody>().AddForce(gunTip.forward * bulletAdditionalForce);
     }
 
     private void Update()
@@ -170,5 +196,6 @@ public class PlayerGun : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(_cameraRef.transform.position, _cameraRef.transform.forward * maxDetectionDistance);
+
     }
 }

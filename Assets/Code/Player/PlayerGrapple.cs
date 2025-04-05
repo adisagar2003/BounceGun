@@ -38,6 +38,8 @@ public class PlayerGrapple : MonoBehaviour
     [Header("Line Handle")]
     [SerializeField] private LineRenderer lineRenderer;
 
+    [Header("FX")]
+    [SerializeField] private GameObject sparkPrefab;
     private void Awake()
     {
        
@@ -59,6 +61,7 @@ public class PlayerGrapple : MonoBehaviour
         if (Physics.Raycast(cam.transform.position,cam.transform.forward, out hit, maxGrappleDistance,whatIsGrappable))
         {
             grappleHitPoint = hit.point;
+            Instantiate(sparkPrefab, hit.transform.position, Quaternion.Euler(90f,0f,0f));
             ExecuteGrapple();
         }
     }
@@ -115,6 +118,7 @@ public class PlayerGrapple : MonoBehaviour
         if (Vector3.Distance(grappleHitPoint,transform.position) < stopGrappleAtThisDistance && isGrappling )
         {
             StopGrapple();
+            
         } 
     }
 

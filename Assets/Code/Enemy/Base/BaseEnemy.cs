@@ -15,7 +15,6 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     [SerializeField] protected List<GameObject> powerups;
     protected bool isDeathCalled = false;
     [SerializeField] protected Vector3 powerupSpawnOffset = new Vector3(0, 1.0f, 0);
-
     public virtual void Start()
     {
         _enemyStateMachine = new EnemyStateMachine();
@@ -48,6 +47,12 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
         }
     }
 
+    // Take damage with a direction vector as param 
+    public virtual void TakeDamage(float amt, Vector3 direction) {
+        // Taking damage 
+        health -= amt;
+       
+    }
 
     protected virtual void Death()
     {

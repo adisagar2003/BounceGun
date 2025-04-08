@@ -226,6 +226,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1676831429412873536, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
         type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 2675634661614555112, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
+        type: 3}
+    - target: {fileID: 1676831429412873536, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 4918217319983852589, guid: 0dc4f32de665ba148a7c0f3b2ad679e5,
@@ -719,6 +725,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialOnDeath: {fileID: -876546973899608171, guid: d4b784787373d214ea43a694a283a701,
     type: 3}
+  powerups: []
+  powerupSpawnOffset: {x: 0, y: 1, z: 0}
   playerRef: {fileID: 0}
   rotatingSpeed: 5
   bulletTimeElapsed: 0
@@ -729,6 +737,7 @@ MonoBehaviour:
   bulletTargetPositionOffset: {x: 0, y: -1, z: 0}
   deathCooldown: 2.4
   materialChangeCooldown: 1.4
+  distanceOfDetection: 6
 --- !u!136 &6435367378320576314
 CapsuleCollider:
   m_ObjectHideFlags: 0

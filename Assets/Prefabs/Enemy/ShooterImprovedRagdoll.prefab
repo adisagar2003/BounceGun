@@ -2818,15 +2818,16 @@ MonoBehaviour:
   - {fileID: 7339834855155748989, guid: 8c51d376e71ff2845a6b4e2d3a87186c, type: 3}
   powerupSpawnOffset: {x: 0, y: 3.85, z: 0}
   playerRef: {fileID: 0}
-  rotatingSpeed: 5
-  bulletTimeElapsed: 0
   bulletPrefab: {fileID: 5277131385598567019, guid: 5d1eb2d43b9a69f4a9a835427fadaa65,
     type: 3}
   gunPoint: {fileID: 5470071340386085376}
-  bulletSpeed: 29
+  bulletTimeElapsed: 0
   bulletTargetPositionOffset: {x: 0, y: -1, z: 0}
-  deathCooldown: 2.4
   materialChangeCooldown: 1.4
+  rotatingSpeed: 5
+  bulletSpeed: 45.5
+  deathCooldown: 2.4
+  shootAfterThisManySeconds: 1.24
   distanceOfDetection: 23.4
 --- !u!136 &4072032193254155551
 CapsuleCollider:

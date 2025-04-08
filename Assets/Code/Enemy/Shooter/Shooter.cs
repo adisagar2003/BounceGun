@@ -17,18 +17,23 @@ public class Shooter : BaseEnemy
     private PlayerMovement playerRefMovement;
 
     [SerializeField] private GameObject playerRef;
-    [SerializeField] private float rotatingSpeed = 5.0f; 
-    [SerializeField] private float bulletTimeElapsed = 0.0f;
     [SerializeField] private GameObject bulletPrefab;
+    private Animator _shooterAnimator;
+
+    [Header("Bullet")]
     [SerializeField] private Transform gunPoint;
-    [SerializeField] private float bulletSpeed = 50.0f;
+    [SerializeField] private float bulletTimeElapsed = 0.0f;
     [SerializeField] private Vector3 bulletTargetPositionOffset;
-    [SerializeField] private float deathCooldown = 2.4f;
     [SerializeField] private float materialChangeCooldown = 1.4f;
-    public float distanceOfDetection = 6f;
+
+    [Header("Combat")]
+    [SerializeField] private float rotatingSpeed = 5.0f; 
+    [SerializeField] private float bulletSpeed = 50.0f;
+    [SerializeField] private float deathCooldown = 2.4f;
+    [SerializeField] private float shootAfterThisManySeconds = 1.3f;
+    [SerializeField] public float distanceOfDetection = 6f;
     
 
-    private Animator _shooterAnimator;
     public override void Start()
     {
         base.Start();
@@ -89,7 +94,7 @@ public class Shooter : BaseEnemy
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotatingSpeed);
         bulletTimeElapsed += Time.deltaTime;
-        if (bulletTimeElapsed > 2.0f)
+        if (bulletTimeElapsed > shootAfterThisManySeconds)
         {
             ShootAtPlayer();
             bulletTimeElapsed = 0.0f;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8242415723755300745}
   - component: {fileID: 1996831548454095801}
   - component: {fileID: 6118761774567369553}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 9180154350047731881}
   - component: {fileID: 4184166707103772716}
   - component: {fileID: 6766918108038778966}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 3513504654325600899}
   - component: {fileID: 7975819995245466614}
   - component: {fileID: -2372444792969642827}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AmmoPowerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +237,7 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -299,7 +299,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8822232694368565467}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

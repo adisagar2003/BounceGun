@@ -18,7 +18,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private float shootDelay = 0.3f;
     [SerializeField] private GameObject smoke;
     [SerializeField] private Transform gunTip;
-    [SerializeField] private AudioSource gunShotAudio;
+    [SerializeField] private AudioSource gunShotAudio;  
 
     [Header("Ammo")]
     [SerializeField] public int ammoNotInClip = 100;

@@ -70,6 +70,12 @@ public class PlayerMovement : MonoBehaviour
     // for example wall slide needs input disabled for a certain time after jumping
     [SerializeField] private float disableTimeDuration = 2.0f;
 
+
+    [Header("Audio Stuff")]
+    [SerializeField] private AudioSource walkSound;
+    [SerializeField] private AudioSource sprintSound;
+    [SerializeField] private AudioSource jumpSound;
+
     #region Events
     public delegate void CameraLeanTowards(string direction);
     public static event CameraLeanTowards  OnCameraLeanTowards;
@@ -168,6 +174,29 @@ public class PlayerMovement : MonoBehaviour
         CalculateDebugData();
         StateManagement();
         IsOnSlope();
+
+        // Loop Walking Sound if Walking
+        if (currentState == PlayerMovementState.Walk)
+        {
+            if (walkSound.isPlaying) return;
+            walkSound.Play();
+        }
+        else if (currentState == PlayerMovementState.Sprint)
+        {
+            if (sprintSound.isPlaying) return;
+            sprintSound.Play();
+        }
+        else if (currentState == PlayerMovementState.WallRun)
+        {
+            if (walkSound.isPlaying) return;
+            walkSound.Play();
+        }
+        else if (currentState == PlayerMovementState.Idle || currentState == PlayerMovementState.Air)
+        {
+            walkSound.Stop();
+            sprintSound.Stop();
+        }
+
     }
 
 

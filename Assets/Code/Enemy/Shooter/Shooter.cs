@@ -32,7 +32,10 @@ public class Shooter : BaseEnemy
     [SerializeField] private float deathCooldown = 2.4f;
     [SerializeField] private float shootAfterThisManySeconds = 1.3f;
     [SerializeField] public float distanceOfDetection = 6f;
-    
+
+
+    [Header("SoundFX")]
+    [SerializeField] private AudioSource shootAudio;
 
     public override void Start()
     {
@@ -73,6 +76,7 @@ public class Shooter : BaseEnemy
         bullet.transform.position = gunPoint.position;
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
         bulletRigidbody.velocity = bulletSpeed * directionTowardsPlayer;    
+        shootAudio.Play();
     }
 
     private void OnTriggerEnter(Collider other)

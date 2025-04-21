@@ -25,7 +25,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] public int currentAmmoOnClip = 13;
     [SerializeField] public int clipSize = 13;
     [SerializeField] public bool isReloading = false;
-    [SerializeField] private float reloadDelay ;
+    [SerializeField] private float reloadDelay;
 
 
     [Header("Damage")]
@@ -38,6 +38,8 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private float bulletAdditionalForce = 10.0f;
     [SerializeField] private Vector3 bulletScale;
 
+    [Header("Sound FX")]
+    [SerializeField] private AudioSource reloadSound;
     // future implementation 
     public static event SendDetectionData OnEnemyDetection;
     public static event SendDetectionData OnNoEnemyDetection;
@@ -113,7 +115,7 @@ public class PlayerGun : MonoBehaviour
 
     private IEnumerator StartReload()
     {
-
+        reloadSound.Play();
         isReloading = true;
         yield return new WaitForSeconds(reloadDelay);
         FillClip();
@@ -134,9 +136,8 @@ public class PlayerGun : MonoBehaviour
         // reduce ammo amount;
         currentAmmoOnClip -= 1;
 
-
-
         RaycastHit hit;
+        
         // instantiate bullet from guntip
         BulletTrailInstantiate();
         Instantiate(smoke, gunTip, false);
@@ -196,6 +197,5 @@ public class PlayerGun : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(_cameraRef.transform.position, _cameraRef.transform.forward * maxDetectionDistance);
-
     }
 }

@@ -22,6 +22,11 @@ public class GunBullet : BaseDamagable
             TakeDamage(bulletDamage);
             Destroy(gameObject);
         }
+
+        if (other.tag == "Enemy")
+        {
+            Destroy(gameObject);
+        }
     }
     private IEnumerator DestroyBullet()
     {

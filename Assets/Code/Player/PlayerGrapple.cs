@@ -61,9 +61,20 @@ public class PlayerGrapple : MonoBehaviour
         if (Physics.Raycast(cam.transform.position,cam.transform.forward, out hit, maxGrappleDistance,whatIsGrappable))
         {
             grappleHitPoint = hit.point;
-            Instantiate(sparkPrefab, hit.transform.position, Quaternion.Euler(90f,0f,0f));
+            Instantiate(sparkPrefab, hit.transform.position, Quaternion.Euler(90f, 0f, 0f));
+            GenerateZapSoundFromGrappleSource(hit);
             ExecuteGrapple();
         }
+    }
+
+    private void GenerateZapSoundFromGrappleSource(RaycastHit hit)
+    {
+        AudioSource grappleZapSoundOrigin = hit.transform.gameObject.GetComponent<AudioSource>();
+        if (grappleZapSoundOrigin)
+        {
+            if (grappleZapSoundOrigin.isPlaying) return;
+            grappleZapSoundOrigin.Play();
+        };
     }
 
     // draw lineRenderer to `hit point` from gun tip to hit point

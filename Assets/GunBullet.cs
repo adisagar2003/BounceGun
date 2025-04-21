@@ -17,15 +17,16 @@ public class GunBullet : BaseDamagable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             TakeDamage(bulletDamage);
             Destroy(gameObject);
         }
 
-        if (other.tag == "Enemy")
+        if (other.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            Debug.Log("Enemy Has been hit by the bullet");
+            Destroy(this);
         }
     }
     private IEnumerator DestroyBullet()

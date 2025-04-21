@@ -127,7 +127,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1866197b594d7934caf46cfa1de71687, type: 2}
+  - {fileID: 2100000, guid: b25692bbbad6bfd4bab3b243a9918e2a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -148,8 +148,8 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
-  m_PreviewTimeScale: 0
+  m_Time: 4.24
+  m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -157,17 +157,17 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.08311001
-        value: 0.11800042
-        inSlope: 0
-        outSlope: 0
+        time: 0.15089732
+        value: 0.012123108
+        inSlope: 0.5467854
+        outSlope: 0.5467854
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 1
       - serializedVersion: 3
-        time: 0.42040378
-        value: 0.174469
+        time: 0.34684116
+        value: 0.43198395
         inSlope: 0.29995176
         outSlope: 0.29995176
         tangentMode: 0
@@ -175,7 +175,7 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.7890509
+        time: 0.83101255
         value: 0
         inSlope: 0
         outSlope: 0
@@ -216,11 +216,11 @@ TrailRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 2
-    numCapVertices: 54
+    numCornerVertices: 0
+    numCapVertices: 0
     alignment: 0
     textureMode: 0
-    textureScale: {x: 0.13, y: 0.67}
+    textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
   m_MinVertexDistance: 0.42
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 3619933003965149887}
   - component: {fileID: 2243397894823480864}
   m_Layer: 3
-  m_Name: GunBulletEnemy
+  m_Name: BulletShotByPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -257,8 +257,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5074452014132706439}
   m_Father: {fileID: 0}
@@ -271,7 +271,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5277131385598567019}
   serializedVersion: 4
-  m_Mass: 0.33
+  m_Mass: 0.11
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -279,12 +279,12 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ImplicitCom: 1
-  m_ImplicitTensor: 1
+  m_ImplicitTensor: 0
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -300,7 +300,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -309,7 +309,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.04
+  m_Radius: 27
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2243397894823480864
 MonoBehaviour:
@@ -323,5 +323,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ae5c436ee2f2f45bca003953ef8c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyBulletTime: 2.22
+  destroyBulletTime: 4.58
   bulletDamage: 8.1

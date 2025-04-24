@@ -64,7 +64,6 @@ public class ButtonSelectable : MonoBehaviour,ISelectHandler,IDeselectHandler,IP
             
         }
 
-
     }
 
     // Update is called once per frame
@@ -75,6 +74,7 @@ public class ButtonSelectable : MonoBehaviour,ISelectHandler,IDeselectHandler,IP
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
+        StopCoroutine(MoveButton(true));
         StartCoroutine(MoveButton(false));
     }
 

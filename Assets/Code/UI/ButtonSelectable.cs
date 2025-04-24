@@ -27,30 +27,41 @@ public class ButtonSelectable : MonoBehaviour,ISelectHandler,IDeselectHandler,IP
     }
     private IEnumerator MoveButton(bool isMouseOver)
     {
-        // on mouse over
-        // move the button slightly above
-        // scale the button a lil bit
         Vector3 lerpedScale;
         Vector3 lerpedPosition;
+        Vector3 targetScale;
+        Vector3 targetPosition;
+
         float timeElapsed = 0.0f;
         while (timeElapsed < _moveTime)
         {
             timeElapsed += Time.deltaTime;
-            Debug.Log(timeElapsed);
+
+            // on mouse over
+            // move the button slightly above
+            // scale the button a lil bit
             if (isMouseOver)
             {
-                lerpedScale = Vector3.Lerp(_startScale, _startScale + new Vector3(_moveScale, _moveScale, _moveScale), (timeElapsed / _moveTime));
-                lerpedPosition = Vector3.Lerp(_startPos, _startPos + new Vector3(0, _upScale, 0), (timeElapsed / _moveTime));
+                targetScale = _startScale + new Vector3(_moveScale, _moveScale, _moveScale);
+                targetPosition = _startPos + new Vector3(0, _upScale, 0);
             }
+            // reset to initials
             else
             {
-                lerpedScale = _startScale;
-                lerpedPosition = _startPos;
+                targetScale = _startScale;
+                targetPosition = _startPos;
             }
 
-            yield return null;
+            // lerp values
+            float t = (timeElapsed / _moveTime);
+            lerpedScale = Vector3.Lerp(transform.localScale, targetScale, t);
+            lerpedPosition = Vector3.Lerp(transform.position, targetPosition, t);
+
             transform.localScale = lerpedScale;
             transform.position = lerpedPosition;
+
+            yield return null;
+            
         }
 
 
@@ -64,7 +75,6 @@ public class ButtonSelectable : MonoBehaviour,ISelectHandler,IDeselectHandler,IP
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
-        StopAllCoroutines();
         StartCoroutine(MoveButton(false));
     }
 

@@ -3078,11 +3078,12 @@ MonoBehaviour:
   powerupSpawnOffset: {x: 0, y: 3.85, z: 0}
   hurtAudio: {fileID: 8249553883489590796}
   playerRef: {fileID: 0}
+  playerRefMovement: {fileID: 0}
   bulletPrefab: {fileID: 5277131385598567019, guid: 5d1eb2d43b9a69f4a9a835427fadaa65,
     type: 3}
   gunPoint: {fileID: 5470071340386085376}
   bulletTimeElapsed: 0
-  bulletTargetPositionOffset: {x: 0, y: -1, z: 0}
+  bulletTargetPositionOffset: {x: 0, y: -1.44, z: 0}
   materialChangeCooldown: 1.4
   rotatingSpeed: 5
   bulletSpeed: 45.5

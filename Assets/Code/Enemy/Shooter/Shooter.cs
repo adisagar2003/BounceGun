@@ -14,9 +14,8 @@ public class Shooter : BaseEnemy
 {
     private ShooterIdleState _shooterIdleState;
     private ShooterShootState _shooterShootState;
-    private PlayerMovement playerRefMovement;
 
-    [SerializeField] private GameObject playerRef;
+
     [SerializeField] private GameObject bulletPrefab;
     private Animator _shooterAnimator;
 
@@ -24,7 +23,7 @@ public class Shooter : BaseEnemy
     [SerializeField] private Transform gunPoint;
     [SerializeField] private float bulletTimeElapsed = 0.0f;
     [SerializeField] private Vector3 bulletTargetPositionOffset;
-    [SerializeField] private float materialChangeCooldown = 1.4f;
+    [SerializeField] private float materialChangeCooldown = 0.4f;
 
     [Header("Combat")]
     [SerializeField] private float rotatingSpeed = 5.0f; 
@@ -40,8 +39,6 @@ public class Shooter : BaseEnemy
     public override void Start()
     {
         base.Start();
-        playerRef = GameObject.Find("Player");
-        playerRefMovement = playerRef.GetComponentInChildren<PlayerMovement>();
         _shooterAnimator = GetComponent<Animator>();
         InitializeStateMachine();
     }
@@ -51,14 +48,6 @@ public class Shooter : BaseEnemy
         base.OnEnable();
         InitializeStateMachine();
     }
-
-
-    public float GetDistanceFromPlayer()
-    {
-        Vector3 playerPosition = playerRef.GetComponentInChildren<PlayerMovement>().GetCurrentPosition();
-        return Vector3.Distance(playerPosition, transform.position);
-    }
-
 
 
     private void InitializeStateMachine()
@@ -76,7 +65,7 @@ public class Shooter : BaseEnemy
         bullet.transform.position = gunPoint.position;
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
         bulletRigidbody.velocity = bulletSpeed * directionTowardsPlayer;    
-        shootAudio.Play();
+        if (!isDeathCalled) shootAudio.Play();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,11 +81,19 @@ public class Shooter : BaseEnemy
     public void LookAtPlayer()
     {
         if (playerRefMovement == null) return;
+
+        // look at player
         Vector3 transformYPosition = playerRefMovement.GetCurrentPosition();
         transformYPosition.y = transform.position.y;
         Vector3 direction = (transformYPosition - transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotatingSpeed);
+
+        PrepareToShoot();
+    }
+
+    private void PrepareToShoot()
+    {
         bulletTimeElapsed += Time.deltaTime;
         if (bulletTimeElapsed > shootAfterThisManySeconds)
         {
@@ -114,12 +111,14 @@ public class Shooter : BaseEnemy
     }
 
 
+
     [ContextMenu("Kill Shooter")]
     protected override void Death()
     {
         if (isDeathCalled) return;
         isDeathCalled = true;
         GetComponent<Rigidbody>().useGravity = false;
+        // makes player float
         //foreach (Rigidbody rbChild in GetComponentsInChildren<Rigidbody>())
         //{
         //    rbChild.useGravity = false;

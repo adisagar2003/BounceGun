@@ -8,17 +8,27 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     // Start is called before the first frame update
     protected float damage = 10.0f;
     protected float health = 40.0f;
-    protected EnemyStateMachine _enemyStateMachine;
+
     // enemy needs to have at least one state
     protected BaseEnemyState baseEnemyState;
+    protected EnemyStateMachine _enemyStateMachine;
+
     [SerializeField] protected Material materialOnDeath;
     [SerializeField] protected List<GameObject> powerups;
     protected bool isDeathCalled = false;
+
     [SerializeField] protected Vector3 powerupSpawnOffset = new Vector3(0, 1.0f, 0);
     [SerializeField] private AudioSource hurtAudio;
+
+    [Header("References")]
+    [SerializeField] protected GameObject playerRef;
+    [SerializeField] protected PlayerMovement playerRefMovement;
+
     public virtual void Start()
     {
         _enemyStateMachine = new EnemyStateMachine();
+        playerRef = GameObject.Find("Player");
+        playerRefMovement = playerRef.GetComponentInChildren<PlayerMovement>();
     }
 
     protected virtual void OnEnable()
@@ -36,6 +46,13 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     {
 
     }
+
+    public float GetDistanceFromPlayer()
+    {
+        Vector3 playerPosition = playerRef.GetComponentInChildren<PlayerMovement>().GetCurrentPosition();
+        return Vector3.Distance(playerPosition, transform.position);
+    }
+
 
     public virtual void TakeDamage(float amt)
     {

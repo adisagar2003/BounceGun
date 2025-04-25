@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool isPaused = false;
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
         
         if (GameOverPanel == null)
         {
@@ -30,7 +29,8 @@ public class GameManager : MonoBehaviour
 
     private void ShowGameOverPanel()
     {
-        GameOverPanel.SetActive(true);
+        if (!GameOverPanel) return;
+        GameOverPanel?.SetActive(true);
     }
 
     public void ResetGame()

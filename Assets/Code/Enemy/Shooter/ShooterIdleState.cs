@@ -35,13 +35,9 @@ public class ShooterIdleState : BaseEnemyState
 
     public override void OnUpdateState()
     {
-        Debug.Log("Update State Running");
         Shooter shooterCast = (Shooter) enemy;
-        Debug.Log(shooterCast.GetDistanceFromPlayer());
         if (shooterCast.GetDistanceFromPlayer() < shooterCast.distanceOfDetection)
         {
-           
-            Debug.Log(shooterCast.GetDistanceFromPlayer());
             shooterCast.AlertShooter();
         }
     }

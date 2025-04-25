@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 991450536245755134}
   - component: {fileID: 4862167038979423716}
   - component: {fileID: 3619933003965149887}
-  - component: {fileID: 2243397894823480864}
+  - component: {fileID: -4082666778789301673}
   m_Layer: 3
   m_Name: BulletShotByPlayer
   m_TagString: Untagged
@@ -311,7 +311,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 27
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2243397894823480864
+--- !u!114 &-4082666778789301673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -320,8 +320,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5277131385598567019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09ae5c436ee2f2f45bca003953ef8c38, type: 3}
+  m_Script: {fileID: 11500000, guid: 5575bf53c14e6094785905309816e6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyBulletTime: 4.58
-  bulletDamage: 8.1

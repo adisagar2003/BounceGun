@@ -35,9 +35,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnPlayerHealthChanged(float amt)
     {
-        if (isTakingDamage) return;
         isTakingDamage = true;
-        this.totalHealth += amt;
+        totalHealth += amt;
         if (totalHealth <= 0)
         {
             OnDeathEvent?.Invoke();
@@ -56,6 +55,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isTakingDamage)
         {
+
             damageTimeElapsed += Time.deltaTime;
             if (damageTimeElapsed > damageTimeCooldown)
             {

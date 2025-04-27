@@ -23,7 +23,6 @@ public class JumpCommand : ICommand
     #if DebuggingMode
         if (_playerMovement == null)
         {
-            Debug.LogError("Player Movement is null");
             return;
         };
     #endif

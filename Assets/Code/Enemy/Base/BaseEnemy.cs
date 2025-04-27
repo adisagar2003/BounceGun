@@ -42,7 +42,7 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
 
     public abstract void ShootAtPlayer();
 
-    public virtual void DamagePlayer()
+    public virtual void DamagePlayer(float amt)
     {
 
     }
@@ -104,4 +104,8 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
         }
     }
 
+    public void DamagePlayer()
+    {
+        throw new NotImplementedException();
+    }
 }

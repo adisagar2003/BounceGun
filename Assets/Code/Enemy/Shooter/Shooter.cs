@@ -133,7 +133,6 @@ public class Shooter : BaseEnemy
     private IEnumerator ChangeMaterialCoroutine()
     {
         yield return new WaitForSeconds(materialChangeCooldown);
-        Debug.Log("Material Should Change");
         ChangeMaterialTo(materialOnDeath);
     }
 

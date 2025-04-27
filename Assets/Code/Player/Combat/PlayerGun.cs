@@ -67,7 +67,6 @@ public class PlayerGun : MonoBehaviour
 
     public void ShootIsReleased()
     {
-        Debug.Log("Shoot is released");
         isShootPressed = false;
     }
 
@@ -82,7 +81,6 @@ public class PlayerGun : MonoBehaviour
     private void Reload()
     {
         StartCoroutine(StartReload());
-        Debug.Log("Reload Called \n" + $"{currentAmmoOnClip}/{ammoNotInClip}");
 
     }
 
@@ -91,7 +89,6 @@ public class PlayerGun : MonoBehaviour
         // fill the clip completely 
         if (ammoNotInClip < 1)
         {
-            Debug.Log("Out of ammo ");
             return;
         }
 
@@ -153,7 +150,6 @@ public class PlayerGun : MonoBehaviour
             if (hit.transform.gameObject.GetComponent<BaseEnemy>())
             {
                 BaseEnemy enemyRef = hit.transform.gameObject.GetComponent<BaseEnemy>();
-                Debug.Log("Target Enemy Should Take Damage");
                 if (enemyRef) enemyRef.TakeDamage(damageAmount);
                 // Instantiate a spark particle system at hit position
                 GameObject sparkFX = Instantiate(sparkPrefab, hit.point, Quaternion.identity);
@@ -169,7 +165,6 @@ public class PlayerGun : MonoBehaviour
 
     private void BulletTrailInstantiate()
     {
-        Debug.Log("Bullet should instantiate");
         GameObject bullet = Instantiate(bulletPrefab, gunTip.position, Quaternion.identity);
         bullet.transform.localScale = bulletScale;
         bullet.GetComponent<Rigidbody>().AddForce(gunTip.forward * bulletAdditionalForce);

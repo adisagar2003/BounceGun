@@ -421,7 +421,6 @@ public class PlayerMovement : MonoBehaviour
         else if (currentState == PlayerMovementState.WallRun && isReadyToJump && jumpInputPressed)
         {
         #if DEBUGMODE
-            Debug.Log("Player Jump for wall called");
         #endif
 
             isReadyToJump = false;

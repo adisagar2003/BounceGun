@@ -16,7 +16,6 @@ public class ShooterIdleState : BaseEnemyState
     public override void EnterState()
     {
         enemyAnimator.SetBool("isPlayerDetected", false);
-        Debug.Log("Entered Idle State");
     }
 
     public override void ExitState()

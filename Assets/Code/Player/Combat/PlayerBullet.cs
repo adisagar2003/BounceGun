@@ -24,7 +24,6 @@ public class PlayerBullet : MonoBehaviour
         // for bullet shot by enemy
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Enemy Hit");
             BaseEnemy enemyRef = other.GetComponent<BaseEnemy>();
             if (enemyRef)
             {

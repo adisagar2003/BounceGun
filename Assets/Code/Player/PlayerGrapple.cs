@@ -94,7 +94,6 @@ public class PlayerGrapple : MonoBehaviour
     {
         isGrappling = false;
         grappleTimeElapsed = 0.0f;
-        Debug.Log("GrappleStopped");
     }
 
     private void ResetLineRenderer()
@@ -121,7 +120,6 @@ public class PlayerGrapple : MonoBehaviour
     {
         if (isGrappling)
         {
-            Debug.Log("grappling moving towards the target hit point");
             Vector3 direction = grappleHitPoint - transform.position;
             _playerMovement.AddLinearForceTowards(direction * grappleLinearForce);
         }

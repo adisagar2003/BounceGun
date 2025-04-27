@@ -10,6 +10,8 @@ public class GunBullet : BaseDamagable
 {
     [SerializeField] private float destroyBulletTime = 2.0f;
     [SerializeField] private float bulletDamage = 13.0f;
+
+   
     void Start()
     {
         StartCoroutine(DestroyBullet());

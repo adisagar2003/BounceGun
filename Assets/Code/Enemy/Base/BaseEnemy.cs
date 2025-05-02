@@ -69,7 +69,6 @@ public abstract class BaseEnemy : MonoBehaviour, IAttackable
     public virtual void TakeDamage(float amt, Vector3 direction) {
         // Taking damage 
         hurtAudio.Play();
-        Debug.Log("Hurt Audio should be heard");    
         health -= amt;
        
     }

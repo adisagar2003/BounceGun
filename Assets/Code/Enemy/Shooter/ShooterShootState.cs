@@ -14,7 +14,6 @@ public class ShooterShootState : BaseEnemyState
         enemyAnimator.SetBool("isPlayerDetected", true);
         enemyAnimator.SetTrigger("Attack");
 
-        Debug.Log("Player Will Attack now");
         // spawn a projectile towards player ref;
         enemy.ShootAtPlayer();
     }

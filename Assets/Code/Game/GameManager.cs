@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
         
         if (GameOverPanel == null)
         {
-            Debug.LogError("Game over Panel is not assigned");
         }
         else
         {
@@ -61,7 +60,6 @@ public class GameManager : MonoBehaviour
 
            else
             {
-                Debug.Log("Pause Game");
                 isPaused = true;
                 Time.timeScale = 0;
             }

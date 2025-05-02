@@ -11,7 +11,6 @@ public class RestPlayerPosition : MonoBehaviour
        
        if (other.CompareTag("Player"))
         {
-            Debug.Log("Position Reset");
             SceneManager.LoadScene(1);
         }
     }
